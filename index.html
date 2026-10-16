@@ -517,6 +517,20 @@ tr.off td{opacity:.55}
 @media (prefers-reduced-motion:reduce){.hswitch span,.hswitch span::after{transition:none}}
 .gcard .linkbtn{color:var(--navy);font-weight:600}
 
+/* ===== Phase 6: one console ===== */
+.viewonly{display:flex;gap:10px;align-items:flex-start;font-size:14px;background:var(--tint);border-color:var(--line2)}
+.viewonly.take{background:#FDF0DC;border-color:#E8C4B4}
+.warnt{color:#9A2F0E}
+.ms-sound{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600}
+.ms-sound.on{background:#1F8A4C;border-color:#1F8A4C}
+.ms-late{border:0;background:#C2410C;color:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;margin-left:auto}
+.ms-late+.ms-user{margin-left:12px}
+.ms .aside .count{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#C2410C;color:#fff;font-size:11px;font-weight:700;display:inline-grid;place-items:center}
+.alarmov .alertbox{animation:none}
+.alarmov .pulse{animation:softpulse 2s ease-in-out infinite}
+@keyframes softpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
+@media (prefers-reduced-motion:reduce){.alarmov .pulse{animation:none}}
+
 </style>
 </head>
 <body>
@@ -1182,18 +1196,18 @@ function startStaff(st){
     sReq = q.docs.map(d=>({id:d.id,...d.data()})); sLoaded = true; sweep(sStays, sReq, sStaysOk);
     const fresh = sReq.filter(r => !sSeen.has(r.id));
     fresh.forEach(r => sSeen.add(r.id));
-    if (!sFirst) { const mine = fresh.filter(r => r.status==='received' && (ST.dept==='All' || r.dept===ST.dept)); if (mine.length){ sAlert = mine[mine.length-1].id; chime(); } }
+    if (!sFirst) { const mine = fresh.filter(r => r.status==='received' && (ST.dept==='All' || r.dept===ST.dept)); if (mine.length){ sAlert = mine[mine.length-1].id; } }
     sFirst = false; soon(renderStaff);
   }, 'staff requests'));
   let firstMsg = true;
   sUnsubs.push(live(pdb.collection('messages').where('at','>=',since(30)), q => {
     const before = new Set(sMsg.map(m=>m.id));
     sMsg = q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.at-b.at);
-    if (!firstMsg && sMsg.some(m => !before.has(m.id) && m.from==='guest')) { chime(); if (!(sTab==='chats' && sRoom)) toastS('New guest message'); }
+    if (!firstMsg && sMsg.some(m => !before.has(m.id) && m.from==='guest')) { chime(true); if (!(sTab==='chats' && sRoom)) toastS('New guest message'); }
     firstMsg = false; markRead(); soon(renderStaff);
   }, 'staff messages'));
   sUnsubs.push(live(pdb.collection('stays'), q => { sStays = q.docs.map(d=>({id:d.id,...d.data()})); sStaysOk = true; sweep(sStays, sReq, sLoaded); soon(renderStaff); }, 'staff stays'));
-  clearInterval(sTimer); sTimer = setInterval(() => { sweep(sStays, sReq, sLoaded && sStaysOk); renderStaff(); if (sReq.some(r => overdue(r) && (ST.dept==='All'||r.dept===ST.dept||ST.dept==='Front Office'))) { if (Math.floor(Date.now()/1000)%60 < 30) chime(); } }, 30000);
+  clearInterval(sTimer); sTimer = setInterval(() => { sweep(sStays, sReq, sLoaded && sStaysOk); renderStaff(); if (sReq.some(r => overdue(r) && (ST.dept==='All'||r.dept===ST.dept||ST.dept==='Front Office'))) {  } }, 30000);
   renderStaff();
 }
 function toastS(m){ toast(m); }
@@ -1208,7 +1222,7 @@ function sCard(r){
   const st = r.status; const od = overdue(r); const lt = late(r);
   const stay = sStays.find(s=>s.id===r.stayId);
   const summary = (r.items||[]).map(i=>`<li>${esc(i.name)}${i.qty>1?` <b>×${i.qty}</b>`:''}</li>`).join('');
-  const act = st==='received' ? `<button class="btn sm" data-sacc="${esc(r.id)}">Accept</button>`
+  const act = !canAct() ? '' : st==='received' ? `<button class="btn sm" data-sacc="${esc(r.id)}">Accept</button>`
             : st==='accepted' ? `<button class="btn sm" data-sdone="${esc(r.id)}">Mark completed</button>` : '';
   return `<article class="card scard ${od?'od':''}">
     <div class="shead"><div><div class="sroom">Room ${esc(r.room)} · ${esc(r.guestName||stay?.guestName||'')}</div><div class="sub">${esc(kl(r))} · #${esc(r.id)} · ${esc(r.dept)}</div></div>
@@ -1222,8 +1236,8 @@ function sCard(r){
   </article>`;
 }
 
-function renderStaff(){
-  if (!ST) return;
+var renderStaff = function(){};
+function staffBody(){
   const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id; const rv = document.getElementById('rmsg')?.value || '';
   const mine = r => sFilter==='All' || r.dept===sFilter;
   const list = sReq.filter(mine);
@@ -1262,36 +1276,17 @@ function renderStaff(){
       <div class="card convo">${cur || sRoom ? (() => { const st = sStays.find(s=>s.id===sRoom); const ms = sMsg.filter(m=>m.stayId===sRoom);
         return `<div class="sroom" style="margin-bottom:8px">Room ${esc(st?.room||cur?.room)} · ${esc(st?.guestName||cur?.name)}</div>
         <div class="msgs">${ms.map(m=>`<div class="bub ${m.from==='staff'?'me':''}" style="max-width:80%">${esc(m.text)}<div class="time">${m.from==='staff'?esc(m.staffName||'Reception')+' · ':''}${tfmt(m.at)}</div></div>`).join('') || '<div class="empty">No messages yet. Say hello.</div>'}</div>
-        <div class="chips" style="margin-top:10px">${['On our way to your room now.','Confirmed for the time you asked.','Could you call reception on Ext. 9?','Anything else we can arrange for you?'].map(q=>`<button class="chip" data-quick="${esc(q)}" style="height:36px;font-size:13px">${esc(q)}</button>`).join('')}</div>
-        <form class="composer" id="rf" style="position:static;padding:10px 0 0;border:none;background:none"><input id="rmsg" aria-label="Reply to room" placeholder="Reply to Room ${esc(st?.room||'')}…" autocomplete="off" maxlength="600"><button class="send" aria-label="Send reply">${svg('send',20,1.8)}</button></form>`; })()
+        ${!canAct() ? '<div class="sub" style="margin-top:10px">View only. Replies are sent from staff logins.</div>' : ''}<div class="chips" style="margin-top:10px;${canAct()?'':'display:none'}">${['On our way to your room now.','Confirmed for the time you asked.','Could you call reception on Ext. 9?','Anything else we can arrange for you?'].map(q=>`<button class="chip" data-quick="${esc(q)}" style="height:36px;font-size:13px">${esc(q)}</button>`).join('')}</div>
+        <form class="composer" id="rf" style="${canAct()?'':'display:none;'}position:static;padding:10px 0 0;border:none;background:none"><input id="rmsg" aria-label="Reply to room" placeholder="Reply to Room ${esc(st?.room||'')}…" autocomplete="off" maxlength="600"><button class="send" aria-label="Send reply">${svg('send',20,1.8)}</button></form>`; })()
         : '<div class="empty">Pick a room on the left to read and reply.</div>'}</div>
     </div>`;
   } else {
     const rooms = Object.keys(DATA.rooms).sort();
     body = `<div class="roomgrid">${rooms.map(n => { const st = sStays.find(s=>s.room===n && s.status==='in-house'); const open = sReq.filter(r=>r.room===n && r.status!=='completed' && (!st || r.stayId===st.id)).length;
       return `<div class="card rcard ${st?'occ':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b>${n}</b>${open?`<span class="count">${open}</span>`:''}</div><div class="sub">${esc(DATA.rooms[n].cat)}</div><div style="font-weight:600;margin-top:4px">${st?esc(st.guestName):'<span style="color:var(--muted);font-weight:400">Vacant</span>'}</div>${st?`<button class="btn sm ghost" style="margin-top:8px;height:34px" data-schat="${esc(st.id)}">Message</button>`:''}</div>`; }).join('')}</div>
-      <div class="sub">Check-ins, access codes and QR cards are managed in the front desk screen (Step 5).</div>`;
+      `;
   }
-  const alertR = sAlert && sReq.find(r=>r.id===sAlert && r.status==='received');
-  $app.innerHTML = `<header class="hdr shdr">
-      <div class="brand">${logo(84,'#FFF8EB')}<small>${esc(P.name)} · Staff</small></div>${propSwitcher()}
-      <div class="who"><div><b>${esc(ST.name)}</b><span>${esc(ST.dept==='All'?'Duty manager':ST.dept)} · <button class="linkbtn" data-slogout="1">Log out</button></span></div>
-      <button class="iconbtn" data-sound="1" aria-pressed="${soundOn}" aria-label="${soundOn?'Mute alerts':'Turn alert sound on'}" title="${soundOn?'Sound on':'Sound off'}">${soundOn?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>':'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6"/></svg>'}</button></div>
-    </header>
-    <nav class="stabs"><button data-stab="requests" class="${sTab==='requests'?'on':''}">Requests${waiting.length?` <span class="count">${waiting.length}</span>`:''}</button><button data-stab="chats" class="${sTab==='chats'?'on':''}">Guest chats${unread?` <span class="count">${unread}</span>`:''}</button><button data-stab="rooms" class="${sTab==='rooms'?'on':''}">Rooms</button><span class="live"><i></i>Live</span></nav>
-    <main class="spage">${body}</main>
-    ${alertR ? `<div class="overlay" role="alertdialog" aria-modal="true" aria-labelledby="altt"><div class="alertbox">
-      <div class="pulse">${star(28)}</div>
-      <div class="eyebrow" style="color:var(--soft)">New guest request · ${tfmt(alertR.receivedAt)}</div>
-      <h2 id="altt">Room ${esc(alertR.room)} · ${esc(alertR.guestName)}</h2>
-      <p>${esc(kl(alertR))}: ${esc((alertR.items||[]).map(i=>i.name+(i.qty>1?' ×'+i.qty:'')).join(', ') || alertR.title)}${alertR.when?` · ${esc(alertR.when)}`:''}</p>
-      ${alertR.note?`<p style="color:var(--soft)">“${esc(alertR.note)}”</p>`:''}
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn light" data-sacc="${esc(alertR.id)}">Accept now</button><button class="btn ghost" style="border-color:var(--soft);color:var(--cream)" data-dismiss="1">Later</button></div>
-    </div></div>` : ''}`;
-  if (rv && document.getElementById('rmsg')) document.getElementById('rmsg').value = rv;
-  if (aid && document.getElementById(aid)) document.getElementById(aid).focus({preventScroll:true});
-  const box = document.querySelector('.msgs'); if (box) box.scrollTop = box.scrollHeight;
-  window.scrollTo(0,y);
+  return body;
 }
 
 async function staffReply(text){
@@ -1497,6 +1492,8 @@ function settingsView(){
       </div>
       <h2 class="sh" style="margin:6px 0 0">Guest check-in and check-out</h2>
       <div class="agrid"><label class="abool" for="st-xco"><input type="checkbox" id="st-xco" ${SETTINGS.expressCheckout!==false?'checked':''}> Express check-out for guests</label><label class="abool" for="st-gst"><input type="checkbox" id="st-gst" ${SETTINGS.gstInvoice!==false?'checked':''}> GST invoice form for guests</label></div>
+      <h2 class="sh" style="margin:6px 0 0">Who answers guests</h2>
+      <label class="abool" for="st-gmt"><input type="checkbox" id="st-gmt" ${SETTINGS.gmTakeover===true?'checked':''}> Let the GM and brand admin take over (accept and reply). Off: only staff logins answer guests.</label>
       <label class="field af" for="st-wa">WhatsApp message sent with the one-tap link · use {greet} {name} {property} {link} {wifi} {wifipass}<textarea id="st-wa" rows="4">${esc(waTemplate())}</textarea></label>
       <h2 class="sh" style="margin:6px 0 0">Dashboard targets</h2>
       <div class="agrid">${[['googlePct','Google review taps (% of check-outs)'],['hkMin','Housekeeping complete (min)'],['fbMin','In-room dining complete (min)'],['mtMin','Maintenance complete (min)'],['rating','Guest rating (out of 5)'],['convPct','Offer conversion (%)'],['upsellPerNight','Revenue per room-night (₹)'],['adoption','Guests using the app (%)']].map(([k,l])=>`<label class="field af" for="st-${k}">${l}<input id="st-${k}" type="number" step="any" value="${esc(K()[k])}"></label>`).join('')}</div><button class="btn" type="submit" style="align-self:flex-start">Save settings</button></form>
@@ -1508,7 +1505,7 @@ function renderAdmin(){
   const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id; const selS = ae && typeof ae.selectionStart==='number' ? ae.selectionStart : null;
   const inH = aStays.filter(s=>s.status==='in-house').length; const open = aReq.filter(r=>r.status==='received'||r.status==='accepted').length;
   { const want = aSec==='hq' ? 'master' : curSeg(); if (SKIN_NOW !== want) skin(want, 'console'); }
-  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : listEditor(aSec);
+  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : ['live','chats','roomsboard'].includes(aSec) ? liveView() : listEditor(aSec);
   $app.className = 'app staff msapp';
   $app.innerHTML = `<div class="ms">${msSide()}<div class="ms-main">${msTop()}<main class="spage">${body}</main></div></div>${msPopHtml()}${copyDialog()}
     ${shareOverlay()}`;
@@ -1686,7 +1683,7 @@ $app.addEventListener('submit', async e => {
     } catch(err){ toast(err && err.code==='quota_exceeded' ? 'Database is full. Remove old records.' : 'Check-in not saved. Try again.'); }
     return renderAdmin(); }
   if (e.target.id==='setform'){ e.preventDefault();
-    try { await pdb.doc('settings/app').set({...SETTINGS, guestUrl:document.getElementById('st-url').value.trim(), acceptMin:Math.max(1,Number(document.getElementById('st-acc').value)||3), reviewUrl:document.getElementById('st-review').value.trim(), ...Object.fromEntries(['googlePct','hkMin','fbMin','mtMin','rating','convPct','upsellPerNight','adoption'].map(k=>[k, Number(document.getElementById('st-'+k).value)||KPI_DEFAULTS[k]])), expressCheckout:document.getElementById('st-xco').checked, gstInvoice:document.getElementById('st-gst').checked, waTemplate:document.getElementById('st-wa').value.trim()===(WA_DEFAULT[curSeg()]||'').trim()?'':document.getElementById('st-wa').value.trim(), updatedBy:AD.name}); toast('Settings saved.'); } catch(err){ toast('Not saved.'); } return; }
+    try { await pdb.doc('settings/app').set({...SETTINGS, guestUrl:document.getElementById('st-url').value.trim(), acceptMin:Math.max(1,Number(document.getElementById('st-acc').value)||3), reviewUrl:document.getElementById('st-review').value.trim(), ...Object.fromEntries(['googlePct','hkMin','fbMin','mtMin','rating','convPct','upsellPerNight','adoption'].map(k=>[k, Number(document.getElementById('st-'+k).value)||KPI_DEFAULTS[k]])), gmTakeover:document.getElementById('st-gmt').checked, expressCheckout:document.getElementById('st-xco').checked, gstInvoice:document.getElementById('st-gst').checked, waTemplate:document.getElementById('st-wa').value.trim()===(WA_DEFAULT[curSeg()]||'').trim()?'':document.getElementById('st-wa').value.trim(), updatedBy:AD.name}); toast('Settings saved.'); } catch(err){ toast('Not saved.'); } return; }
 
 });
 
@@ -2139,7 +2136,7 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-eye]
 
 function renderTeamLogin(err, info){
   skin('master');
-  shell(`${tHead('Moustache Concierge', ENTRY === 'staff' ? 'Staff console · team login' : 'Team login · all properties')}
+  shell(`${tHead('Moustache Concierge', 'Team login · staff, GMs and brand admin')}
     <form class="card" id="tlf" novalidate>
       <label class="field" for="tl-code">Employee code<input id="tl-code" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="e.g. IHPL0500" value="${esc(store.get('mc_code') || '')}"></label>
       ${pwField('tl-pw','Password')}
@@ -2147,7 +2144,7 @@ function renderTeamLogin(err, info){
       <button class="btn" type="submit" id="tl-btn">Sign in</button>
       <div class="sub" style="text-align:center">Forgot your password? Ask your GM or the brand admin to reset it.</div>
     </form>
-    <div class="tl-links"><button class="linkbtn" data-goto="${ENTRY === 'staff' ? 'admin' : 'staff'}">${ENTRY === 'staff' ? 'Admin console' : 'Staff console'}</button></div>`);
+    `);
   const f = document.getElementById('tlf'); if (!f) return;
   (store.get('mc_code') ? document.getElementById('tl-pw') : document.getElementById('tl-code')).focus();
   f.addEventListener('submit', async e => {
@@ -2157,7 +2154,7 @@ function renderTeamLogin(err, info){
     if (!window.crypto || !crypto.subtle) return renderTeamLogin('Open this link in Chrome or Safari, starting with https://');
     const locks = store.get('mc_lock') || {}; const lk = locks[code];
     if (lk && lk.until > Date.now()) return renderTeamLogin(`Too many wrong attempts. Try again in ${Math.ceil((lk.until - Date.now())/1000)} seconds.`);
-    if (ENTRY === 'staff') { soundOn = true; try { chime(); } catch(_){} }
+    soundOn = store.get('mc_sound') !== 0; try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch(_){}
     const btn = document.getElementById('tl-btn'); btn.disabled = true; btn.textContent = 'Checking…';
     try {
       const s = await withAuthRetry(() => db.doc('users/' + code).get());
@@ -3289,6 +3286,137 @@ $app.addEventListener('click', async e => { if (!AD) return; const b = e.target.
   try { await pdb.doc('wall/' + b.dataset.whide).update({hidden: b.dataset.v === '1', moderatedBy:ME.name, moderatedAt:Date.now()}); } catch(err){ toast('Not saved.'); } });
 $app.addEventListener('submit', async e => { if (!AD || e.target.id !== 'crewform') return; e.preventDefault(); const t = document.getElementById('crewtext').value.trim(); if (!t) return;
   try { await pdb.collection('wall').add({name:'The crew', crew:true, text:t.slice(0, 280), at:Date.now(), by:ME.code}); e.target.reset(); toast('Posted to the wall.'); } catch(err){ toast('Not posted.'); } });
+
+
+/* =================================================================
+   PHASE 6 — one console for every role
+   · Live requests, guest chats and rooms sit inside the MS-style console
+   · only staff logins (Front office, Department) accept, complete and reply; Brand admin and GM watch
+   · alarm keeps ringing until a request is accepted; “Snooze 2 min” brings it back
+   ================================================================= */
+Object.assign(NI, { live:'M4 18h16M6 18a6 6 0 0 1 12 0M12 9V7M10 7h4', chats:'M4 5h16v11H9l-5 4V5z', roomsboard:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z', bellon:'M4 9h4l5-4v14l-5-4H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11', belloff:'M4 9h4l5-4v14l-5-4H4zM17 9l5 6M22 9l-5 6' });
+SECTIONS.unshift(['live','Live requests','Requests from guests, as they come in'], ['chats','Guest chats','Messages with in-house guests'], ['roomsboard','Rooms','Who is in which room and what is open']);
+NAV_GROUPS.splice(1, 0, ['Live', ['live','chats','roomsboard']]);
+const rings = () => !!ME && (ME.role === 'fo' || ME.role === 'dept');
+const canAct = () => rings() || (!!ME && (ME.role === 'gm' || ME.role === 'brand') && SETTINGS.gmTakeover === true);
+const myScope = r => !ME ? false : ME.role === 'dept' ? r.dept === (ME.dept || r.dept) : true;
+const _secAllowed6 = secAllowed;
+secAllowed = sec => sec === 'live' || sec === 'roomsboard' ? !!ME : sec === 'chats' ? !!ME && ME.role !== 'dept' : _secAllowed6(sec);
+const SEC_TAB = { live:'requests', chats:'chats', roomsboard:'rooms' };
+
+/* staff body inside the console */
+function liveView(){
+  sTab = SEC_TAB[aSec] || 'requests';
+  if (ME.role === 'dept') sFilter = ME.dept || 'All';
+  let h = staffBody();
+  if (ME.role === 'dept') h = h.replace(/<div class="chips">[\s\S]*?<\/div>\s*<div class="scols">/, '<div class="scols">');
+  const waitingLong = sReq.filter(r => r.status === 'received' && overdue(r));
+  const banner = !rings() && canAct() ? `<div class="card viewonly take">${ni('info',18)}<div><b>Take-over is on for ${esc(P.name)}.</b> You can accept and reply; your name is recorded on each action.${waitingLong.length ? ` <b class="warnt">${waitingLong.length} waiting over ${ACCEPT_MIN} min.</b>` : ''}</div></div>` : !canAct() ? `<div class="card viewonly">${ni('info',18)}<div><b>View only.</b> Guests are answered from staff logins (Front office and Department staff), so every reply and acceptance is tied to an employee code.${waitingLong.length ? ` <b class="warnt">${waitingLong.length} waiting over ${ACCEPT_MIN} min.</b>` : ''}</div></div>` : '';
+  return banner + h;
+}
+function alarmHtml(){
+  if (!rings()) return '';
+  const r = pendingAlarm(); if (!r) return '';
+  const n = alarmQueue().length;
+  return `<div class="overlay alarmov" role="alertdialog" aria-modal="true" aria-labelledby="altt"><div class="alertbox">
+    <div class="pulse">${ni('live', 28)}</div>
+    <div class="eyebrow" style="color:var(--soft)">New guest request · ${tfmt(r.receivedAt)} · ${ago(r.receivedAt)}${n > 1 ? ` · ${n} waiting` : ''}</div>
+    <h2 id="altt">Room ${esc(r.room)}${r.bed ? ' · bed ' + esc(r.bed) : ''} · ${esc(r.guestName || '')}</h2>
+    <p>${esc(kl(r))}: ${esc((r.items||[]).map(i => i.name + (i.qty > 1 ? ' ×' + i.qty : '')).join(', ') || r.title || '')}${r.when ? ` · ${esc(r.when)}` : ''}</p>
+    ${r.note ? `<p style="color:var(--soft)">“${esc(r.note)}”</p>` : ''}
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn light" data-sacc="${esc(r.id)}">Accept now</button><button class="btn ghost" style="border-color:var(--soft);color:var(--cream)" data-snooze="${esc(r.id)}">Snooze 2 min</button></div>
+    ${!soundOn ? '<button class="linkbtn" data-sound="1" style="color:var(--soft);margin-top:6px">Sound is off · tap to turn it on</button>' : ''}
+  </div></div>`;
+}
+const snoozed = {};
+const alarmQueue = () => sReq.filter(r => r.status === 'received' && myScope(r) && !(snoozed[r.id] > Date.now())).sort((a, b) => a.receivedAt - b.receivedAt);
+const pendingAlarm = () => alarmQueue()[0] || null;
+
+/* ringing loop: a soft chime every 2 s while something in my scope is waiting and not snoozed */
+let wakeLock = null, titleFlip = false;
+setInterval(() => {
+  if (!AD || !ST || !rings()) return;
+  const q = alarmQueue();
+  if (q.length) {
+    if (soundOn) chime();
+    try { if (navigator.vibrate) navigator.vibrate([300, 150, 300]); } catch(e){}
+    titleFlip = !titleFlip; document.title = titleFlip ? `🔔 (${q.length}) New request` : `(${q.length}) ${P.name}`;
+    if (!document.querySelector('.alarmov')) soon(renderAdmin);
+  } else if (/New request/.test(document.title)) document.title = `${P.name} · Concierge`;
+}, 2000);
+async function keepAwake(){ try { if ('wakeLock' in navigator && !wakeLock && document.visibilityState === 'visible') { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); } } catch(e){} }
+document.addEventListener('visibilitychange', () => { if (canAct() && AD) keepAwake(); });
+
+/* render hooks: staff body becomes part of the console */
+renderStaff = function(){ if (AD) { if (['live','chats','roomsboard'].includes(aSec) || pendingAlarm()) { if (!typing()) soon(renderAdmin); } else soon(updateBadges); } };
+function updateBadges(){ const w = sReq.filter(r => r.status === 'received' && myScope(r)).length, u = sMsg.filter(m => m.from === 'guest' && !m.read).length;
+  const set = (k, n) => { const b = document.querySelector(`.ms .aside [data-asec="${k}"]`); if (!b) return; let c = b.querySelector('.count'); if (!n) { if (c) c.remove(); return; } if (!c) { c = document.createElement('span'); c.className = 'count'; b.appendChild(c); } c.textContent = n; };
+  set('live', w); set('chats', u); }
+const _renderAdmin6 = renderAdmin;
+renderAdmin = function(){
+  if (!AD) return;
+  const rv = document.getElementById('rmsg') ? document.getElementById('rmsg').value : null;
+  _renderAdmin6();
+  if (['live','chats','roomsboard'].includes(aSec)) { const box = document.querySelector('.msgs'); if (box) box.scrollTop = box.scrollHeight; }
+  if (rv != null && document.getElementById('rmsg')) document.getElementById('rmsg').value = rv;
+  const al = alarmHtml(); if (al) document.getElementById('app').insertAdjacentHTML('beforeend', al);
+  updateBadges();
+};
+const _msTop6 = msTop;
+const lateChip = () => { if (rings() || !ME) return ''; const n = sReq.filter(r => r.status === 'received' && overdue(r)).length; return n ? `<button class="ms-late" data-asec-go="live">${n} waiting over ${ACCEPT_MIN} min</button>` : ''; };
+msTop = () => _msTop6().replace('<div class="ms-user">', `${lateChip()}${rings() ? `<button class="ms-sound ${soundOn?'on':''}" data-sound="1" aria-pressed="${soundOn}" aria-label="${soundOn?'Mute alert sound':'Turn alert sound on'}" title="${soundOn?'Alert sound on':'Alert sound off'}">${ni(soundOn?'bellon':'belloff', 18)}<span class="ms-hide">${soundOn?'Sound on':'Sound off'}</span></button>` : ''}<div class="ms-user">`);
+
+/* every login opens the console; staff land on Live requests */
+const _enterConsole6 = enterConsole;
+enterConsole = async function(){
+  if (canAct() || ENTRY === 'staff') aSec = SEC_TAB[aSec] ? aSec : 'live';
+  ENTRY = 'admin';
+  const allowed = myProps();
+  if (!allowed.length) return logoutTeam('Your login has no property yet. Ask the brand admin to add one.');
+  let pid = store.get('mc_pid'); if (!allowed.some(p => p.id === pid)) pid = (allowed.find(p => p.id === DEFAULT_PID) || allowed[0]).id;
+  store.set('mc_pid', pid);
+  await usePid(pid, 'console');
+  if (location.hash !== '#admin') history.replaceState(null, '', '#admin');
+  if (hqAllowed() && !store.get('mc_pid_chosen') && !canAct()) aSec = 'hq';
+  startAdmin({name:ME.name, code:ME.code});
+  startStaff({name:ME.name, dept: ME.role === 'dept' ? (ME.dept || 'All') : 'All', code:ME.code});
+  if (rings()) { keepAwake(); if (!soundOn) toast('Tap “Sound off” at the top to turn on the alert sound.'); }
+};
+const _startStaff6 = startStaff;
+startStaff = function(st){ _startStaff6(st); if (AD) soon(renderAdmin); };
+
+/* actions: only staff logins can act */
+$app.addEventListener('click', e => {
+  if (!AD) return; const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if ((d.sacc || d.sdone || d.quick) && !canAct()) { e.stopImmediatePropagation(); toast('View only. Staff logins handle guest requests.'); return; }
+  if (d.schat) { aSec = 'chats'; }
+  if (d.asecGo) { aSec = d.asecGo; window.scrollTo(0,0); soon(renderAdmin); return; }
+  if (d.snooze) { snoozed[d.snooze] = Date.now() + 120000; toast('Snoozed for 2 minutes. It will ring again if nobody accepts it.'); soon(renderAdmin); return; }
+  if (d.sacc) { delete snoozed[d.sacc]; }
+  if (d.sound) { e.stopImmediatePropagation(); soundOn = !soundOn; store.set('mc_sound', soundOn ? 1 : 0); if (soundOn) { chime(true); keepAwake(); } soon(renderAdmin); return; }
+}, true);
+$app.addEventListener('submit', e => { if (AD && e.target.id === 'rf' && !canAct()) { e.preventDefault(); e.stopImmediatePropagation(); toast('View only.'); } }, true);
+
+/* soft, soothing alert tone (marimba-like): a gentle two-note chime; chats get a single note */
+chime = function(single){
+  if (!soundOn) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime, notes = single ? [[880, 0]] : [[659.25, 0], [987.77, 0.22]];
+    notes.forEach(([f, d]) => {
+      [1, 2.01].forEach((m, k) => {
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.type = 'sine'; o.frequency.value = f * m; o.connect(g); g.connect(audioCtx.destination);
+        const peak = k ? 0.035 : 0.16;
+        g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(peak, t + d + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 1.1);
+        o.start(t + d); o.stop(t + d + 1.15);
+      });
+    });
+  } catch(e){}
+};
+const _switchProp6 = switchProp;
+switchProp = async function(pid){ await _switchProp6(pid); if (AD && ST) startStaff(ST); };
 
 /* ---------- BOOT ---------- */
 window.addEventListener('hashchange', () => location.reload());
