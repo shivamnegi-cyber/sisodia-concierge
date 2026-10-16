@@ -19,7 +19,7 @@ window.SB_CONFIG = {
 };
 </script>
 <title>Moustache Concierge</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Kumbh+Sans:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&family=Bowlby+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Kumbh+Sans:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&family=Bowlby+One&family=Gloock&family=Covered+By+Your+Grace&display=swap">
 <style>
 :root{
   color-scheme: light;
@@ -453,6 +453,70 @@ tr.off td{opacity:.55}
 .sendrow2.sent{background:#EEF8F1;border-color:#BFE3CB}
 @media (max-width:520px){.sendrow{flex-direction:column;align-items:center}}
 
+/* ===== Phase 5: segment guest homes ===== */
+.ghome{gap:14px}
+.ghome .indent{margin-left:0}
+.ghero{position:relative;overflow:hidden;margin:-18px -16px 0;padding:22px 20px 22px;background:var(--deep);color:var(--cream)}
+.ghero h1{font-family:var(--display);font-weight:400;font-size:28px;line-height:1.12;margin:0 0 6px;text-wrap:balance;position:relative}
+.ghero p{margin:0;font-size:13.5px;opacity:.88;position:relative}
+.gpills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;position:relative}
+.gpill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:inherit}
+.gstar{position:absolute;right:-28px;top:-6px;opacity:.09;pointer-events:none}
+[data-seg=luxuria] .ghero{background:linear-gradient(165deg,#002055 0%,#000814 100%)}
+[data-seg=luxuria] .ghero h1{font-family:'Gloock','Outfit',Georgia,serif;font-size:30px}
+[data-seg=select] .ghero{background-color:#2D3824;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%2389957D' stroke-width='1' opacity='.5'%3E%3Cpath d='M0 28L28 0L56 28L28 56Z'/%3E%3Cpath d='M14 28L28 14L42 28L28 42Z'/%3E%3C/g%3E%3C/svg%3E")}
+[data-seg=select] .ghero h1{font-weight:700}
+[data-seg=hostel] .ghero{background:#CA2F21;padding-bottom:28px}
+[data-seg=hostel] .ghero h1{font-size:32px;line-height:1}
+.gscr{font-family:'Covered By Your Grace','Bowlby One',cursive;font-size:20px!important;color:#FFD662;transform:rotate(-2deg);display:inline-block;opacity:1!important;margin-top:4px!important}
+.gblob{position:absolute;right:-34px;bottom:-46px;width:130px;height:130px;border-radius:50%;background:#FFD662}
+[data-seg=hostel] .gpill{background:#000;border:2px solid #000;color:#fff}
+.glabel{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px}
+[data-seg=luxuria] .glabel{letter-spacing:.22em}
+.ggrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gtile{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px 6px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;text-align:center;line-height:1.2;color:var(--ink)}
+.gtile svg{color:var(--navy)}
+[data-seg=luxuria] .gtile{border-radius:6px}[data-seg=luxuria] .gtile svg{color:#B8A787}
+[data-seg=hostel] .gtile{border:2px solid #000;box-shadow:3px 3px 0 #000;border-radius:14px}[data-seg=hostel] .gtile svg{color:#CA2F21}
+.gcard{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.gcard h3{margin:0;font-family:var(--display);font-weight:500;font-size:19px;color:var(--deep)}
+.gcard p{margin:0;font-size:13.5px;color:var(--muted)}
+.gcard .btn{align-self:flex-start}
+[data-seg=luxuria] .gpriv{background:linear-gradient(165deg,#002055,#000814);border:0;color:#FFF8EB}
+[data-seg=luxuria] .gpriv h3{color:#FFF8EB;font-family:'Gloock',Georgia,serif;font-weight:400}
+[data-seg=luxuria] .gpriv p{color:rgba(255,248,235,.75)}
+[data-seg=luxuria] .gpriv .glabel{color:#B8A787}
+.gwifi{flex-direction:row;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.gwifi b{display:block;font-size:16px;margin-top:4px}.gwifi span{font-size:13px;color:var(--muted)}
+[data-seg=hostel] .gcard{border:2px solid #000;box-shadow:4px 4px 0 #000}
+.gtonight{background:#FFD662!important}.gtonight p{color:#000!important}
+.htag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:2px 9px;border:2px solid #000;border-radius:999px;background:#fff;color:#000}
+.gopen{gap:6px}
+.greq{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;background:none;padding:6px 0;text-align:left;color:var(--ink);font-size:14px}
+.hev{display:flex;flex-direction:column;gap:8px}
+.hev h3{margin:0;font-family:var(--display);font-size:20px;font-weight:400}
+.hev p{margin:0;font-size:14px;color:var(--muted)}
+[data-seg=hostel] .hev{border:2px solid #000;box-shadow:4px 4px 0 #000}
+.hpost{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed var(--line2);font-size:14px}
+.hpost:last-child{border-bottom:0}
+.hpost>div{flex:1;min-width:0;overflow-wrap:anywhere}
+.hpost i{width:32px;height:32px;border-radius:50%;border:2px solid #000;display:grid;place-items:center;font-style:normal;font-weight:800;flex:none;background:#FFD662;color:#000}
+.hpost small{color:var(--muted)}.hwhen{display:block;font-size:11px;margin-top:2px}
+.hpost .linkbtn{color:var(--muted);font-size:12px}
+.hoptin{display:flex;gap:12px;align-items:flex-start}
+.hswitch{position:relative;flex:none;width:46px;height:28px;margin-top:2px}
+.hswitch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.hswitch span{position:absolute;inset:0;border-radius:999px;background:#CFC6B4;border:2px solid #000;transition:background .15s}
+.hswitch span::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s}
+.hswitch input:checked+span{background:#CA2F21}.hswitch input:checked+span::after{transform:translateX(18px)}
+.hswitch input:focus-visible+span{outline:2px solid #000;outline-offset:2px}
+.hcompose{display:flex;flex-direction:column;gap:8px}
+.hcompose input,.hcompose textarea{font:inherit;font-size:14px;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;background:var(--white);color:var(--ink)}
+.hcompose .btn{align-self:flex-end}
+.impsel{height:34px;border:1px solid var(--line2);border-radius:8px;padding:0 6px;font-size:13px;max-width:150px}
+@media (prefers-reduced-motion:reduce){.hswitch span,.hswitch span::after{transition:none}}
+.gcard .linkbtn{color:var(--navy);font-weight:600}
+
 </style>
 </head>
 <body>
@@ -472,7 +536,7 @@ tr.off td{opacity:.55}
 let DATA = {"hk": [{"cat": "Bedding & Linen", "name": "Extra pillow", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Bedding & Linen", "name": "Extra blanket / duvet", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Bedding & Linen", "name": "Change bed linen", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Bedding & Linen", "name": "Extra bed / rollaway", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Towels", "name": "Bath towel", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Towels", "name": "Hand towel", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Towels", "name": "Face towel", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Towels", "name": "Pool towel", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Towels", "name": "Bath mat", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Shampoo", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Conditioner", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Body wash / shower gel", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Dental kit", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Shaving kit", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Comb", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Sanitary kit", "max": 2, "elig": "all", "min": 15, "on": true}, {"cat": "Personal Care", "name": "Bubble bath", "max": 1, "elig": "tub", "min": 15, "on": true}, {"cat": "Tea & Coffee", "name": "Tea bags (assorted)", "max": 6, "elig": "all", "min": 15, "on": true}, {"cat": "Tea & Coffee", "name": "Coffee sachets", "max": 6, "elig": "all", "min": 15, "on": true}, {"cat": "Tea & Coffee", "name": "Sugar / sweetener sachets", "max": 6, "elig": "all", "min": 15, "on": true}, {"cat": "Tea & Coffee", "name": "Milk powder / creamer", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Tea & Coffee", "name": "Drinking water bottle", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Laundry bag", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Slippers", "max": 4, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Iron & ironing board", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Hair dryer", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Kettle", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Mosquito repellent", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Room Extras", "name": "Baby cot", "max": 1, "elig": "all", "min": 15, "on": true}, {"cat": "Service", "name": "Room cleaning now", "max": 1, "elig": "all", "min": 20, "on": true}, {"cat": "Service", "name": "Turn-down service", "max": 1, "elig": "suite", "min": 20, "on": true}, {"cat": "Service", "name": "Do not disturb", "max": 1, "elig": "all", "min": 20, "on": true}, {"cat": "Service", "name": "Clear tray / dishes", "max": 1, "elig": "all", "min": 20, "on": true}], "dining": [{"sec": "Breakfast", "name": "Poha with sev & pomegranate", "veg": "Veg", "price": 220, "min": 30, "on": true}, {"sec": "Breakfast", "name": "Aloo paratha with curd & pickle", "veg": "Veg", "price": 260, "min": 30, "on": true}, {"sec": "Breakfast", "name": "Pyaaz kachori with chutneys (2 pcs)", "veg": "Veg", "price": 180, "min": 30, "on": true}, {"sec": "Breakfast", "name": "Eggs to order with toast", "veg": "Egg", "price": 240, "min": 30, "on": true}, {"sec": "Breakfast", "name": "Fresh fruit platter", "veg": "Veg", "price": 280, "min": 30, "on": true}, {"sec": "Starters", "name": "Paneer tikka", "veg": "Veg", "price": 380, "min": 30, "on": true}, {"sec": "Starters", "name": "Chicken tikka", "veg": "Non-veg", "price": 440, "min": 30, "on": true}, {"sec": "Starters", "name": "Hara bhara kebab", "veg": "Veg", "price": 320, "min": 30, "on": true}, {"sec": "Starters", "name": "Masala peanuts / papad basket", "veg": "Veg", "price": 180, "min": 30, "on": true}, {"sec": "Rajasthani Mains", "name": "Dal baati churma", "veg": "Veg", "price": 480, "min": 30, "on": true}, {"sec": "Rajasthani Mains", "name": "Gatte ki sabzi", "veg": "Veg", "price": 380, "min": 30, "on": true}, {"sec": "Rajasthani Mains", "name": "Ker sangri", "veg": "Veg", "price": 400, "min": 30, "on": true}, {"sec": "Rajasthani Mains", "name": "Laal maas", "veg": "Non-veg", "price": 620, "min": 30, "on": true}, {"sec": "Rajasthani Mains", "name": "Rajasthani thali (veg)", "veg": "Veg", "price": 650, "min": 30, "on": true}, {"sec": "Indian Mains", "name": "Dal makhani", "veg": "Veg", "price": 360, "min": 30, "on": true}, {"sec": "Indian Mains", "name": "Paneer butter masala", "veg": "Veg", "price": 420, "min": 30, "on": true}, {"sec": "Indian Mains", "name": "Butter chicken", "veg": "Non-veg", "price": 520, "min": 30, "on": true}, {"sec": "Indian Mains", "name": "Jeera rice", "veg": "Veg", "price": 220, "min": 30, "on": true}, {"sec": "Indian Mains", "name": "Tandoori roti / butter naan", "veg": "Veg", "price": 60, "min": 30, "on": true}, {"sec": "Continental & Snacks", "name": "Club sandwich", "veg": "Non-veg", "price": 380, "min": 30, "on": true}, {"sec": "Continental & Snacks", "name": "Veg grilled sandwich", "veg": "Veg", "price": 300, "min": 30, "on": true}, {"sec": "Continental & Snacks", "name": "French fries", "veg": "Veg", "price": 220, "min": 30, "on": true}, {"sec": "Continental & Snacks", "name": "Penne arrabbiata / alfredo", "veg": "Veg", "price": 420, "min": 30, "on": true}, {"sec": "Desserts", "name": "Ghevar (seasonal)", "veg": "Veg", "price": 260, "min": 20, "on": true}, {"sec": "Desserts", "name": "Gulab jamun (2 pcs)", "veg": "Veg", "price": 180, "min": 20, "on": true}, {"sec": "Beverages", "name": "Masala chai", "veg": "Veg", "price": 90, "min": 20, "on": true}, {"sec": "Beverages", "name": "Filter / cold coffee", "veg": "Veg", "price": 180, "min": 20, "on": true}, {"sec": "Beverages", "name": "Fresh lime soda", "veg": "Veg", "price": 150, "min": 20, "on": true}, {"sec": "Beverages", "name": "Chaas / lassi", "veg": "Veg", "price": 150, "min": 20, "on": true}], "spa": [{"type": "Massage", "name": "Rajasthani Abhyanga (warm oil, full body)", "mins": 60, "price": 3200, "on": true}, {"type": "Massage", "name": "Swedish relaxing massage", "mins": 60, "price": 2800, "on": true}, {"type": "Massage", "name": "Deep tissue massage", "mins": 60, "price": 3200, "on": true}, {"type": "Massage", "name": "Head, neck & shoulder", "mins": 30, "price": 1400, "on": true}, {"type": "Massage", "name": "Foot reflexology", "mins": 30, "price": 1200, "on": true}, {"type": "Massage", "name": "Couple's massage (2 guests)", "mins": 60, "price": 5800, "on": true}, {"type": "Facial", "name": "Hydrating facial", "mins": 45, "price": 2200, "on": true}, {"type": "Facial", "name": "Ubtan glow facial", "mins": 45, "price": 2400, "on": true}, {"type": "Wellness", "name": "Steam room session", "mins": 20, "price": 600, "on": true}, {"type": "Wellness", "name": "Private sunrise yoga (1–2 guests)", "mins": 60, "price": 1500, "on": true}, {"type": "Wellness", "name": "Poolside cabana (half day)", "mins": 240, "price": 1500, "on": true}], "laundry": [{"name": "Shirt / T-shirt", "wash": 80, "iron": 60, "dry": 120, "on": true}, {"name": "Trousers / jeans", "wash": 90, "iron": 70, "dry": 140, "on": true}, {"name": "Kurta / salwar set", "wash": 120, "iron": 90, "dry": 180, "on": true}, {"name": "Saree", "wash": 250, "iron": 150, "dry": 400, "on": true}, {"name": "Dress", "wash": 150, "iron": 100, "dry": 250, "on": true}, {"name": "Jacket / blazer", "wash": 200, "iron": 120, "dry": 350, "on": true}, {"name": "Undergarments (per pc)", "wash": 40, "iron": 0, "dry": 0, "on": true}, {"name": "Socks (pair)", "wash": 30, "iron": 0, "dry": 0, "on": true}], "taxi": [{"type": "Drop", "name": "Jaipur Airport (JAI)", "car": "Sedan", "fare": 1400, "dist": "~30 km", "on": true}, {"type": "Drop", "name": "Jaipur Airport (JAI)", "car": "SUV", "fare": 1900, "dist": "~30 km", "on": true}, {"type": "Drop", "name": "Jaipur Junction railway station", "car": "Sedan", "fare": 1200, "dist": "~25 km", "on": true}, {"type": "Drop", "name": "Amer Fort (one way)", "car": "Sedan", "fare": 600, "dist": "~11 km", "on": true}, {"type": "Tour", "name": "Amer, Jaigarh & Panna Meena ka Kund – half day (4 hrs)", "car": "Sedan", "fare": 1800, "dist": null, "on": true}, {"type": "Tour", "name": "Pink City – Hawa Mahal, City Palace, Jantar Mantar, bazaars – full day (8 hrs)", "car": "Sedan", "fare": 3200, "dist": null, "on": true}, {"type": "Tour", "name": "Nahargarh Fort sunset – 4 hrs", "car": "Sedan", "fare": 1800, "dist": null, "on": true}, {"type": "Tour", "name": "Jal Mahal & Amer sunrise photo run – 3 hrs", "car": "Sedan", "fare": 1500, "dist": null, "on": true}], "occ": [{"type": "Birthday", "name": "Birthday cake (½ kg) + room balloon décor", "price": 2500, "notice": "4 hrs", "on": true}, {"type": "Anniversary", "name": "Rose-petal bed décor + cake + card", "price": 3500, "notice": "4 hrs", "on": true}, {"type": "Dining", "name": "Private candle-light dinner in the garden (2 guests, set menu)", "price": 6500, "notice": "6 hrs", "on": true}, {"type": "Dining", "name": "Poolside dinner set-up (2 guests)", "price": 7500, "notice": "6 hrs", "on": true}, {"type": "Surprise", "name": "Welcome surprise in room (flowers + chocolates + note)", "price": 1800, "notice": "3 hrs", "on": true}, {"type": "Experience", "name": "Rajasthani folk music evening (private, 45 min)", "price": 8000, "notice": "24 hrs", "on": true}, {"type": "Experience", "name": "Mehendi artist in room", "price": 1500, "notice": "6 hrs", "on": true}], "offers": [{"code": "SPA15", "title": "15% off any spa treatment before 2 PM", "dept": "Spa", "deal": "15% off", "elig": "All rooms", "on": true, "featured": false, "value": 0, "spaPct": 15, "spaBefore": 14}, {"code": "LATECO", "title": "Late check-out till 2 PM", "dept": "Front Office", "deal": "₹1,500 flat", "elig": "All rooms", "on": true, "featured": false, "value": 1500, "spaPct": 0, "spaBefore": 0}, {"code": "UPGRADE", "title": "Upgrade to a Jr. Suite with bathtub", "dept": "Front Office", "deal": "₹2,500 / night", "elig": "Premium & Luxury rooms", "on": true, "featured": false, "value": 2500, "spaPct": 0, "spaBefore": 0}, {"code": "GARDEN", "title": "Candle-light garden dinner for two", "dept": "F&B", "deal": "Complimentary dessert", "elig": "All rooms", "on": true, "featured": true, "value": 6500, "spaPct": 0, "spaBefore": 0}, {"code": "AMER", "title": "Amer sunrise tour with breakfast box", "dept": "Front Office", "deal": "₹200 off", "elig": "All rooms", "on": true, "featured": false, "value": 1300, "spaPct": 0, "spaBefore": 0}, {"code": "STAY2", "title": "Stay one more night", "dept": "Front Office", "deal": "10% off extra night", "elig": "All rooms", "on": true, "featured": false, "value": 0, "spaPct": 0, "spaBefore": 0}], "guide": [{"cat": "Must-see", "name": "Amer Fort", "desc": "Hilltop Rajput fort of red sandstone & marble — Sheesh Mahal, Ganesh Pol. Go early morning to beat the heat and crowds.", "dist": "~11 km", "drive": "20–25 min", "hours": "8 AM–5:30 PM; light & sound show evenings", "map": "https://www.google.com/maps/search/?api=1&query=Amer+Fort+Jaipur", "on": true}, {"cat": "Must-see", "name": "Jaigarh Fort", "desc": "Fort above Amer with the Jaivana, one of the world's largest wheeled cannons, and sweeping Aravalli views.", "dist": "~13 km", "drive": "25–30 min", "hours": "9 AM–4:30 PM", "map": "https://www.google.com/maps/search/?api=1&query=Jaigarh+Fort+Jaipur", "on": true}, {"cat": "Must-see", "name": "Panna Meena ka Kund", "desc": "17th-century stepwell with criss-cross steps — one of Jaipur's most photographed spots.", "dist": "~11 km", "drive": "20–25 min", "hours": "Daylight hours", "map": "https://www.google.com/maps/search/?api=1&query=Panna+Meena+ka+Kund+Jaipur", "on": true}, {"cat": "Must-see", "name": "Jal Mahal", "desc": "Palace that appears to float on Man Sagar Lake. Best at sunrise or sunset from the promenade.", "dist": "~15 km", "drive": "25–30 min", "hours": "Viewing from the lakeside", "map": "https://www.google.com/maps/search/?api=1&query=Jal+Mahal+Jaipur", "on": true}, {"cat": "Must-see", "name": "Nahargarh Fort", "desc": "Fort on the Aravalli ridge overlooking the whole Pink City — the classic sunset spot.", "dist": "~20 km", "drive": "40–45 min", "hours": "10 AM–5:30 PM", "map": "https://www.google.com/maps/search/?api=1&query=Nahargarh+Fort+Jaipur", "on": true}, {"cat": "Must-see", "name": "Hawa Mahal", "desc": "The 953-window 'Palace of Winds' — icon of the Pink City.", "dist": "~18 km", "drive": "40–50 min", "hours": "9 AM–4:30 PM", "map": "https://www.google.com/maps/search/?api=1&query=Hawa+Mahal+Jaipur", "on": true}, {"cat": "Must-see", "name": "City Palace", "desc": "Royal residence and museum with the Pritam Niwas Chowk's peacock gates.", "dist": "~19 km", "drive": "45 min", "hours": "9:30 AM–5 PM", "map": "https://www.google.com/maps/search/?api=1&query=City+Palace+Jaipur", "on": true}, {"cat": "Must-see", "name": "Jantar Mantar", "desc": "UNESCO-listed 18th-century astronomical observatory with the world's largest stone sundial.", "dist": "~19 km", "drive": "45 min", "hours": "9 AM–4:30 PM", "map": "https://www.google.com/maps/search/?api=1&query=Jantar+Mantar+Jaipur", "on": true}, {"cat": "Culture", "name": "Anokhi Museum of Hand Printing", "desc": "Restored haveli in Amer showing Rajasthan's block-printing craft, with live demos.", "dist": "~11 km", "drive": "20–25 min", "hours": "Check days — usually closed Mondays", "map": "https://www.google.com/maps/search/?api=1&query=Anokhi+Museum+of+Hand+Printing+Jaipur", "on": true}, {"cat": "Culture", "name": "Albert Hall Museum", "desc": "Indo-Saracenic museum; beautifully lit at night.", "dist": "~22 km", "drive": "50 min", "hours": "9 AM–5 PM, 7–10 PM", "map": "https://www.google.com/maps/search/?api=1&query=Albert+Hall+Museum+Jaipur", "on": true}, {"cat": "Nature", "name": "Nahargarh Biological Park", "desc": "Wildlife park on the Delhi road with lions, tigers and a bird-watching trail.", "dist": "~8 km", "drive": "15–20 min", "hours": "Check days — usually closed Tuesdays", "map": "https://www.google.com/maps/search/?api=1&query=Nahargarh+Biological+Park+Jaipur", "on": true}, {"cat": "Where to Eat", "name": "1135 AD (inside Amer Fort)", "desc": "Royal-style Rajasthani fine dining in the fort's palace rooms.", "dist": "~11 km", "drive": "20–25 min", "hours": "Lunch & dinner — reserve", "map": "https://www.google.com/maps/search/?api=1&query=1135+AD+(inside+Amer+Fort)+Jaipur", "on": true}, {"cat": "Where to Eat", "name": "Laxmi Misthan Bhandar (LMB), Johari Bazaar", "desc": "Jaipur institution since 1954 for Rajasthani thalis and sweets like ghevar.", "dist": "~19 km", "drive": "45 min", "hours": "Lunch & dinner", "map": "https://www.google.com/maps/search/?api=1&query=Laxmi+Misthan+Bhandar+(LMB),+Johari+Bazaar+Jaipur", "on": true}, {"cat": "Where to Eat", "name": "Rawat Mishthan Bhandar", "desc": "Famous for pyaaz kachori and mawa kachori — a classic Jaipur breakfast stop.", "dist": "~22 km", "drive": "50 min", "hours": "Morning to evening", "map": "https://www.google.com/maps/search/?api=1&query=Rawat+Mishthan+Bhandar+Jaipur", "on": true}, {"cat": "Where to Eat", "name": "Bar Palladio, Narain Niwas", "desc": "Italian-inspired bar in a striking blue interior — for a special evening out.", "dist": "~24 km", "drive": "55 min", "hours": "Evenings", "map": "https://www.google.com/maps/search/?api=1&query=Bar+Palladio,+Narain+Niwas+Jaipur", "on": true}, {"cat": "Shopping", "name": "Johari & Bapu Bazaar", "desc": "Jewellery, lac bangles, mojaris and block-printed textiles in the old city.", "dist": "~19 km", "drive": "45 min", "hours": "~11 AM–9 PM; many shops closed Sundays", "map": "https://www.google.com/maps/search/?api=1&query=Johari+&+Bapu+Bazaar+Jaipur", "on": true}], "contacts": [{"grp": "In-house", "name": "Front desk / reception", "num": "Ext. 9", "note": "24 hrs", "on": true}, {"grp": "Emergency (India)", "name": "National emergency", "num": "112", "note": "All emergencies", "on": true}, {"grp": "Emergency (India)", "name": "Police", "num": "100", "note": "", "on": true}, {"grp": "Emergency (India)", "name": "Ambulance", "num": "108", "note": "", "on": true}, {"grp": "Emergency (India)", "name": "Fire", "num": "101", "note": "", "on": true}, {"grp": "Emergency (India)", "name": "Tourist helpline (Ministry of Tourism)", "num": "1363", "note": "Multilingual", "on": true}], "policies": [{"name": "Check-in / check-out", "text": "Check-in from 2:00 PM; check-out by 11:00 AM. Early check-in and late check-out depend on availability and may be charged.", "on": true}, {"name": "ID at check-in", "text": "A valid government photo ID is required for every adult guest. Foreign nationals must show a passport and valid visa (Form C is filed by the hotel).", "on": true}, {"name": "Deposit", "text": "A card pre-authorisation or cash deposit may be taken at check-in for incidentals.", "on": true}, {"name": "Smoking", "text": "Smoking is not allowed in rooms. Please use the designated smoking area. A deep-cleaning fee applies if this is breached.", "on": true}, {"name": "Pool", "text": "Pool open during posted hours only. Children must be supervised. Proper swimwear required. No glassware at the pool.", "on": true}, {"name": "Visitors", "text": "Visitors are welcome in public areas. For guest safety, visitors cannot stay in rooms after 10 PM.", "on": true}, {"name": "Quiet hours", "text": "Please keep noise low between 10 PM and 7 AM out of respect for other guests.", "on": true}, {"name": "Outside food & drinks", "text": "Outside food and beverages are not allowed in restaurants or public areas.", "on": true}, {"name": "Pets", "text": "Pets are not allowed.", "on": true}, {"name": "Damage & loss", "text": "Damage to hotel property or loss of room keys will be charged at actual cost.", "on": true}, {"name": "Valuables", "text": "Please use the in-room safe. The hotel is not responsible for valuables left unattended.", "on": true}], "kpi": {"accept": 3}, "prop": {"name": "Sisodia Bagh", "full": "Sisodia Bagh – Luxuria Jaipur by Moustache", "welcome": "Welcome to Sisodia Bagh, your garden retreat below the Aravallis, minutes from Amer. I'm your personal concierge for the whole stay. Tap what you need below.", "address": "NH-11C, Delhi–Jaipur Highway, Kukas, Amer, Jaipur, Rajasthan 302038", "maps": "https://maps.app.goo.gl/4xP4n6ivsSvBeEQu6", "landmark": "On the left-hand side of the highway", "airport": "~30 km / 45–60 min", "station": "~25 km / 40–50 min", "wifiName": "Moustache Luxuria", "wifiPass": "Luxuria@2026", "phone": "7998161161", "ext": "9", "whatsapp": "917998161161", "email": "kukas@moustacheluxuria.com", "timings": [{"label": "Check-in", "value": "2:00 PM"}, {"label": "Check-out", "value": "11:00 AM"}, {"label": "Breakfast · Bay Leaf Restaurant", "value": "8:00 – 10:30 AM"}, {"label": "Restaurant & in-room dining", "value": "8:30 AM – 10:30 PM"}, {"label": "Pool", "value": "8:30 AM – 7:00 PM"}, {"label": "Spa & steam room", "value": "8:30 AM – 7:00 PM"}], "facilities": ["Outdoor pool", "Gardens & lawns", "Bay Leaf Restaurant", "Steam room", "Massages & facials", "Kids' area", "Free parking", "Free Wi-Fi", "24-hour front desk", "Designated smoking area"], "today": [{"label": "Breakfast", "value": "8:00 – 10:30 AM", "sub": "Bay Leaf Restaurant"}, {"label": "Pool", "value": "Open till 7:00 PM", "sub": "Towels on request"}], "greet": "Khamma Ghani"}, "services": [{"id": "housekeeping", "kind": "housekeeping", "label": "Housekeeping", "dept": "Housekeeping", "desc": "Usually delivered within 15 minutes", "options": "", "on": true}, {"id": "dining", "kind": "dining", "label": "In-room dining", "dept": "F&B", "desc": "Rajasthani favourites and comfort food, to your room", "options": "", "on": true}, {"id": "spa", "kind": "spa", "label": "Spa & steam", "dept": "Spa", "desc": "Open 8:30 AM – 7:00 PM · we confirm your slot in the chat", "options": "", "on": true}, {"id": "laundry", "kind": "laundry", "label": "Laundry", "dept": "Housekeeping", "desc": "Our team collects the bag from your room", "options": "", "on": true}, {"id": "taxi", "kind": "taxi", "label": "Taxi & tours", "dept": "Front Office", "desc": "Trusted drivers arranged by the front desk", "options": "", "on": true}, {"id": "occasion", "kind": "occasion", "label": "Special occasions", "dept": "Front Office", "desc": "Birthdays, anniversaries and surprises, arranged quietly", "options": "", "on": true}, {"id": "maintenance", "kind": "maintenance", "label": "Maintenance", "dept": "Engineering", "desc": "A technician usually reaches you within 30 minutes", "options": "", "on": true}, {"id": "wakeup", "kind": "wakeup", "label": "Wake-up call", "dept": "Front Office", "desc": "Reception will call your room phone", "options": "", "on": true}, {"id": "minibar", "kind": "custom", "label": "Mini bar refill", "dept": "F&B", "desc": "Hidden for now — switch on when the mini bar is live", "options": "Coca-Cola / Sprite (300 ml) | 90\nPackaged juice (200 ml) | 90\nPremium salted nuts | 250\nChocolate bar | 120", "on": false}], "roomList": [{"no": "101", "cat": "Jr. Suite with Bathtub", "tier": "Suite", "tub": true}, {"no": "102", "cat": "Jr. Suite with Bathtub", "tier": "Suite", "tub": true}, {"no": "103", "cat": "Jr. Suite with Bathtub", "tier": "Suite", "tub": true}, {"no": "104", "cat": "Jr. Suite with Bathtub", "tier": "Suite", "tub": true}, {"no": "105", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "106", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "107", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "108", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "109", "cat": "Presidential Suite with Bathtub", "tier": "Suite", "tub": true}, {"no": "201", "cat": "Luxury Room with Balcony", "tier": "Standard", "tub": false}, {"no": "202", "cat": "Luxury Room with Balcony", "tier": "Standard", "tub": false}, {"no": "203", "cat": "Luxury Room with Balcony", "tier": "Standard", "tub": false}, {"no": "204", "cat": "Luxury Room with Balcony", "tier": "Standard", "tub": false}, {"no": "205", "cat": "Premium Room", "tier": "Standard", "tub": false}, {"no": "206", "cat": "Premium Room", "tier": "Standard", "tub": false}, {"no": "207", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "208", "cat": "Premium Room with Balcony", "tier": "Standard", "tub": false}, {"no": "209", "cat": "Presidential Family Suite", "tier": "Suite", "tub": false}]};
 const SISODIA = JSON.parse(JSON.stringify(DATA));
 let DEFAULTS = JSON.parse(JSON.stringify(DATA));
-function roomsMap(list){ const m = {}; (list||[]).forEach(r => { m[String(r.no)] = {cat:r.cat, tier:r.tier, tub:!!r.tub}; }); return m; }
+function roomsMap(list){ const m = {}; (list||[]).forEach(r => { m[String(r.no)] = {cat:r.cat, tier:r.tier, tub:!!r.tub, beds:Number(r.beds)||0}; }); return m; }
 DATA.rooms = roomsMap(DATA.roomList);
 let P = DATA.prop;
 let SETTINGS = {acceptMin: 3, guestUrl: 'https://claude.ai/artifact/T1PkoQ1oGzTWU5gyXVkNYd', reviewUrl: ''};
@@ -1396,7 +1460,7 @@ function staysView(){
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit" ${vacant.length?'':'disabled'}>Check in &amp; create codes</button><button class="btn ghost" type="button" data-anewcode="1">New code</button></div>
     </form>
     <div class="card" style="display:flex;flex-direction:column;gap:8px"><h2 class="sh" style="margin:0">Rooms today</h2>
-      <div class="minigrid">${DATA.roomList.map(r=>{ const s = inH.find(x=>x.room===String(r.no)); return `<div class="mini ${s?'occ':''} ${s&&overdueOut(s)?'late':''}" title="${esc(r.cat)}"><b>${r.no}</b><span>${s?esc(s.guestName):'Vacant'}</span></div>`; }).join('')}</div>
+      <div class="minigrid">${DATA.roomList.map(r=>{ const s = inH.find(x=>x.room===String(r.no)); return `<div class="mini ${s?'occ':''} ${s&&overdueOut(s)?'late':''}" title="${esc(r.cat)}"><b>${r.no}</b><span>${r.beds ? `${inH.filter(x=>x.room===String(r.no)).length}/${r.beds} beds` : s?esc(s.guestName):'Vacant'}</span></div>`; }).join('')}</div>
       <div class="sub">Navy = in-house · orange = past check-out time</div></div>
   </div>
   <h2 class="sh">In-house guests <span>${inH.length}</span></h2>
@@ -1444,7 +1508,7 @@ function renderAdmin(){
   const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id; const selS = ae && typeof ae.selectionStart==='number' ? ae.selectionStart : null;
   const inH = aStays.filter(s=>s.status==='in-house').length; const open = aReq.filter(r=>r.status==='received'||r.status==='accepted').length;
   { const want = aSec==='hq' ? 'master' : curSeg(); if (SKIN_NOW !== want) skin(want, 'console'); }
-  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : listEditor(aSec);
+  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : listEditor(aSec);
   $app.className = 'app staff msapp';
   $app.innerHTML = `<div class="ms">${msSide()}<div class="ms-main">${msTop()}<main class="spage">${body}</main></div></div>${msPopHtml()}${copyDialog()}
     ${shareOverlay()}`;
@@ -2703,7 +2767,7 @@ function renderLogin(err){
         if (!gid || !code) return renderLogin('Enter both your Guest ID and access code.');
         const snap = await withAuthRetry(() => pdb.collection('stays').where('guestId','==',gid).get());
         const h = await sha('sb|' + gid + '|' + code.toUpperCase());
-        const d = snap.docs.map(x=>({id:x.id,...x.data()})).sort((a,b)=>(b.checkIn||0)-(a.checkIn||0)).find(x => x.codeHash === h && (!stayOut(x) || canFarewell(x)));
+        const d = snap.docs.map(x=>({id:x.id,...x.data()})).sort((a,b)=>(b.checkIn||0)-(a.checkIn||0)).find(x => x.codeHash === h && !stayOut(x));
         if (!d) return renderLogin(snap.empty ? 'We couldn’t find that Guest ID. Check your welcome card.' : 'That access code doesn’t match. Check your welcome card or call reception.');
         store.set('sb_gid', gid); store.set('sb_session', {id:d.id, h, pid:PID}); return startSession(d);
       }
@@ -2711,8 +2775,9 @@ function renderLogin(err){
       if (!rm || !sur) return renderLogin('Enter your room number and surname.');
       const lk = store.get('mc_glock') || {}; if (lk.until > Date.now()) return renderLogin('Too many tries. Please wait a minute or call reception.');
       const snap = await withAuthRetry(() => pdb.collection('stays').where('room','==',rm).get());
-      const hits = snap.docs.map(x=>({id:x.id,...x.data()})).filter(x => !stayOut(x) || canFarewell(x)).filter(x => (x.surname || surnameOf(x.guestName)) === sur || normWord(x.guestName) === sur).sort((a,b)=>(b.checkIn||0)-(a.checkIn||0));
-      if (!hits.length) { const n = (lk.n || 0) + 1; store.set('mc_glock', n >= 5 ? {n:0, until:Date.now() + 60000} : {n}); return renderLogin(snap.empty ? `We couldn’t find a stay in room ${rm}. Check the room number or call reception.` : 'That surname doesn’t match this room. Use the name on your booking, or call reception.'); }
+      const active = snap.docs.map(x=>({id:x.id,...x.data()})).filter(x => !stayOut(x));
+      const hits = active.filter(x => (x.surname || surnameOf(x.guestName)) === sur || normWord(x.guestName) === sur).sort((a,b)=>(b.checkIn||0)-(a.checkIn||0));
+      if (!hits.length) { const n = (lk.n || 0) + 1; store.set('mc_glock', n >= 5 ? {n:0, until:Date.now() + 60000} : {n}); return renderLogin(!active.length ? `There’s no guest checked in to room ${rm} right now. Check the room number, or ask reception to check you in.` : 'That surname doesn’t match this room. Use the name on your booking, or call reception.'); }
       store.del('mc_glock'); const d = hits[0];
       store.set('sb_session', {id:d.id, h:d.codeHash, pid:PID}); startSession(d);
     } catch (err) { console.error(err); const c = String(err && (err.code || err.message) || 'unknown');
@@ -2851,6 +2916,15 @@ function parseDate(v, h, m){
   if ((x = s.match(/^([A-Za-z]{3})[A-Za-z]*\s+(\d{1,2}),?\s+(\d{4})/))) return new Date(+x[3], MON[x[1].toLowerCase()] ?? 0, +x[2], h, m).getTime();
   return null;
 }
+function parseRoomCell(v){
+  const raw = String(v == null ? '' : v).trim(), s = raw.toUpperCase().replace(/\s+/g, '').replace(/\.0$/, '');
+  if (!s) return {room:'', bed:null, raw};
+  if (DATA.rooms[s]) return {room:s, bed:null, raw};
+  let m = s.match(/^([A-Z]{0,3}\d{1,4}[A-Z]?)-([A-Z]?\d{1,2})(?=$|-|\(|[A-Z])/);
+  if (m && DATA.rooms[m[1]]) return {room:m[1], bed:Number(m[2].replace(/\D/g, '')) || null, raw};
+  m = s.match(/^([A-Z]{0,3}\d{1,4}[A-Z]?)(?=$|-|\()/); if (m && DATA.rooms[m[1]]) return {room:m[1], bed:null, raw};
+  return {room:'', bed:null, raw};
+}
 function rowsToArrivals(rows){
   let hi = rows.findIndex(r => r.some(c => COLS.name.test(String(c).trim())) && r.some(c => COLS.room.test(String(c).trim())));
   if (hi < 0) hi = rows.findIndex(r => r.some(c => COLS.name.test(String(c).trim())));
@@ -2862,8 +2936,9 @@ function rowsToArrivals(rows){
   for (const r of rows.slice(hi + 1)) {
     const g = k => idx[k] >= 0 ? r[idx[k]] : '';
     const name = String(g('name') || '').replace(/\s+/g, ' ').trim(); if (!name || /^total/i.test(name)) continue;
-    const room = String(g('room') || '').trim().toUpperCase().replace(/\s+/g, '').replace(/\.0$/, '');
-    out.push({name, room, inAt:parseDate(g('arrival'), 14, 0) || Date.now(), outAt:parseDate(g('departure'), 11, 0), mobile:String(g('mobile') || '').replace(/[^\d+]/g, ''), res:String(g('res') || '').trim(), email:String(g('email') || '').trim()});
+    if (/^#|^\(?\d+\)?$|^total|^grand/i.test(name)) continue;
+    const rc = parseRoomCell(g('room'));
+    out.push({name, room:rc.room, bed:rc.bed, rawRoom:rc.raw, inAt:parseDate(g('arrival'), 14, 0) || Date.now(), outAt:parseDate(g('departure'), 11, 0), mobile:String(g('mobile') || '').replace(/[^\d+]/g, ''), res:String(g('res') || '').trim(), email:String(g('email') || '').trim()});
   }
   return {rows:out, mapped:Object.keys(idx).filter(k => idx[k] >= 0)};
 }
@@ -2879,7 +2954,7 @@ function checkImp(){
   const today = new Date(); today.setHours(23,59,59,999);
   const taken = {};
   aImp.rows.forEach(r => {
-    r.issue = ''; if (!r.room) r.issue = 'No room number';
+    r.issue = ''; if (!r.room) r.issue = r.rawRoom ? `Choose the room (eZee says “${r.rawRoom}”)` : 'Choose the room';
     else if (!DATA.rooms[r.room]) r.issue = `Room ${r.room} isn’t in this property’s room list`;
     else if (r.inAt > today.getTime()) r.issue = 'Arrives later (import on the arrival day)';
     else if (r.outAt && r.outAt < Date.now()) r.issue = 'Departure date has passed';
@@ -2896,7 +2971,7 @@ function importView(){
     ${im.err ? `<div class="err">${esc(im.err)}</div>` : ''}
     ${im.rows && !im.done ? `<div class="sub">${im.rows.length} rows found · columns matched: ${esc(im.mapped.join(', '))}</div>
       <div style="overflow-x:auto"><table class="atable imptable"><thead><tr><th></th><th>Guest</th><th>Room</th><th>Arrival</th><th>Departure</th><th>Mobile</th><th>Status</th></tr></thead><tbody>
-      ${im.rows.map((r, i) => `<tr class="${r.issue?'off':''}"><td><input type="checkbox" aria-label="Import ${esc(r.name)}" data-impick="${i}" ${r.pick?'checked':''} ${r.issue?'disabled':''}></td><td><b>${esc(r.name)}</b>${r.res?`<br><small>${esc(r.res)}</small>`:''}</td><td>${esc(r.room || '–')}${roomBeds(r.room)?' <small>dorm</small>':''}</td><td>${fmtDT(r.inAt)}</td><td><input type="datetime-local" data-impout="${i}" value="${r.outAt?dtLocal(r.outAt):''}" aria-label="Departure for ${esc(r.name)}"></td><td><input data-impmob="${i}" value="${esc(r.mobile)}" inputmode="tel" aria-label="Mobile for ${esc(r.name)}" style="width:140px"></td><td>${r.issue ? `<small>${esc(r.issue)}</small>` : '<span class="pill completed">Ready</span>'}</td></tr>`).join('')}
+      ${im.rows.map((r, i) => `<tr class="${r.issue?'off':''}"><td><input type="checkbox" aria-label="Import ${esc(r.name)}" data-impick="${i}" ${r.pick?'checked':''} ${r.issue?'disabled':''}></td><td><b>${esc(r.name)}</b>${r.res?`<br><small>${esc(r.res)}</small>`:''}</td><td><select data-improom="${i}" aria-label="Room for ${esc(r.name)}" class="impsel"><option value="">Choose…</option>${DATA.roomList.map(x => `<option value="${esc(x.no)}" ${String(x.no)===r.room?'selected':''}>${esc(x.no)}${x.beds?' · dorm':''}</option>`).join('')}</select>${r.bed?`<br><small>bed ${r.bed}</small>`:''}${r.rawRoom && r.rawRoom.toUpperCase()!==r.room ? `<br><small>eZee: ${esc(r.rawRoom)}</small>`:''}</td><td>${fmtDT(r.inAt)}</td><td><input type="datetime-local" data-impout="${i}" value="${r.outAt?dtLocal(r.outAt):''}" aria-label="Departure for ${esc(r.name)}"></td><td><input data-impmob="${i}" value="${esc(r.mobile)}" inputmode="tel" aria-label="Mobile for ${esc(r.name)}" style="width:140px"></td><td>${r.issue ? `<small>${esc(r.issue)}</small>` : '<span class="pill completed">Ready</span>'}</td></tr>`).join('')}
       </tbody></table></div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn" data-impgo="1" ${ok.length && !im.busy ? '' : 'disabled'}>${im.busy ? 'Checking in…' : `Check in ${ok.length} guest${ok.length===1?'':'s'}`}</button><span class="sub">Missing departure dates default to tomorrow 11 AM. All offers are switched on.</span></div>` : ''}
     ${im.done ? `<div class="sub"><b>${im.done.length} guests checked in.</b> Send each link from the company WhatsApp. Sent links turn green.</div>
@@ -2909,7 +2984,7 @@ async function runImport(){
   const picks = aImp.rows.filter(r => r.pick && !r.issue), done = [], local = aStays.slice();
   for (const r of picks) {
     const key = newKey(), gid = `${r.room}-${rnd(4)}`, code = rnd(6), id = `${r.room}-${Date.now().toString(36)}${rnd(2)}`.toLowerCase();
-    const bed = roomBeds(r.room) ? nextBed(local, r.room) : null;
+    const bed = roomBeds(r.room) ? (r.bed && r.bed <= roomBeds(r.room) && !inHouseIn(local, r.room).some(s => s.bed === r.bed) ? r.bed : nextBed(local, r.room)) : null;
     const out = r.outAt || atTime(1, 11, 0);
     const doc = {room:r.room, guestName:r.name, surname:surnameOf(r.name), mobile:r.mobile, email:r.email, ezeeRes:r.res, guestId:gid, codeHash: await sha('sb|'+gid+'|'+code), keyHashes:[await keyHash(key)], checkIn:Math.min(r.inAt, Date.now()), checkOut:out, status:'in-house', offers:L('offers').map(o=>o.code), offersEnabled:true, foodOrdering:true, foodLink:'', source:'ezee-import', createdBy:AD.name, createdAt:Date.now()};
     if (bed) doc.bed = bed;
@@ -2939,9 +3014,281 @@ $app.addEventListener('change', async e => {
     catch(err){ aImp = {file:f.name, err:'We couldn’t read that file. Export it again as CSV or Excel.'}; }
     return renderAdmin(); }
   if (t.dataset.impick) { aImp.rows[+t.dataset.impick].pick = t.checked; checkImp(); return renderAdmin(); }
+  if (t.dataset.improom) { const r = aImp.rows[+t.dataset.improom]; r.room = t.value; r.bed = null; r.pick = undefined; checkImp(); return renderAdmin(); }
   if (t.dataset.impout) { aImp.rows[+t.dataset.impout].outAt = t.value ? new Date(t.value).getTime() : null; checkImp(); return renderAdmin(); }
   if (t.dataset.impmob) { aImp.rows[+t.dataset.impmob].mobile = t.value.trim(); return; }
 });
+
+
+/* =================================================================
+   PHASE 5 — segment guest experiences
+   · a segment-styled Home for every guest (Luxuria / Select / Hostel)
+   · Hostel: events board with RSVPs, community wall (first names, opt-in), café, trips
+   · property packs: room lists and local info for properties set up from eZee + Google
+   ================================================================= */
+Object.assign(NI, { home:'M3 11l9-7 9 7v9h-6v-6H9v6H3z', spark:'M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3', chat:'M4 5h16v11H9l-5 4V5z', people:'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0M17 11a2.5 2.5 0 1 0 0-5M21 20a5 5 0 0 0-4-5', info:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v6M12 7.5h.01', cup:'M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8zM17 9h2a2 2 0 0 1 0 4h-2', bed:'M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 14h18M7 10V7h4v3', leaf:'M5 19C5 10 11 5 20 5c0 9-5 15-14 14M5 19l8-8', shirt:'M8 4l-5 3 2 4 2-1v10h10V10l2 1 2-4-5-3a4 4 0 0 1-8 0z', car:'M5 16h14M6 16v2M18 16v2M4 16l1.5-5a2 2 0 0 1 2-1.5h9a2 2 0 0 1 2 1.5L20 16', tool:'M14 6a4 4 0 0 0 5 5l-8 8a2 2 0 0 1-3-3l8-8a4 4 0 0 0-2-2z', clock:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2', gift:'M4 11h16v9H4zM3 7h18v4H3zM12 7v13', star:'M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z', door:'M5 21V4h11v17M16 21h3M12 12h.01', doc:'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5' });
+const KIND_ICON = { housekeeping:'bed', dining:'cup', spa:'leaf', laundry:'shirt', taxi:'car', occasion:'gift', maintenance:'tool', wakeup:'clock', custom:'star' };
+const mapsQ = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+
+/* ---------- property packs (rooms from eZee, local details from Google listings) ---------- */
+const range = (a, b) => Array.from({length:b - a + 1}, (_, i) => a + i);
+const dorm = (no, cat, beds) => ({no:String(no), cat, tier:'Standard', tub:false, beds});
+const priv = (no, cat, tub) => ({no:String(no), cat, tier:/suite/i.test(cat) ? 'Suite' : 'Standard', tub:!!tub, beds:0});
+const gd = (cat, name, desc, dist, drive, hours, q) => ({cat, name, desc, dist, drive, hours, map:mapsQ(q || name), on:true});
+const PACKS = {
+  'jaipur-hostel': {
+    prop:{ address:'7, Park House, M.I. Road, near Ganpati Plaza, Jaipur, Rajasthan', maps:mapsQ('Moustache Hostel Jaipur M.I. Road'), landmark:'Near Ganpati Plaza, M.I. Road', airport:'~13 km / 30–40 min', station:'~3 km / 10–15 min (Jaipur Junction)',
+      timings:[{label:'Check-in', value:'1:00 PM'}, {label:'Check-out', value:'11:00 AM'}, {label:'Stay extensions at the desk', value:'9:00 AM – 9:00 PM'}, {label:'Café & rooftop', value:'8:00 AM – 11:00 PM'}],
+      facilities:['Rooftop café','Plunge pool','Free Wi-Fi','Free city maps','Free city tour','Luggage storage','24-hour reception','Bicycle parking','Meeting room'],
+      today:[{label:'Free city tour', value:'Ask the desk for today’s time', sub:'Meet at reception'}, {label:'Rooftop', value:'Open till 11 PM', sub:'Café & plunge pool'}] },
+    rooms:[ dorm(210,'Standard 12-bed mixed dorm (non-AC)',12), dorm(209,'Standard 8-bed mixed dorm (non-AC)',8), dorm(105,'Deluxe 6-bed mixed dorm (non-AC)',6), dorm(204,'Deluxe 6-bed mixed dorm (non-AC)',6),
+      dorm(101,'Deluxe 6-bed mixed AC dorm',6), dorm(104,'Deluxe 6-bed mixed AC dorm',6), dorm(201,'Deluxe 6-bed mixed AC dorm',6), dorm(205,'Deluxe 6-bed mixed AC dorm',6),
+      dorm(207,'Deluxe 4-bed female AC dorm',4), dorm(107,'Deluxe 4-bed mixed AC dorm',4), dorm(108,'Deluxe 4-bed mixed AC dorm',4), dorm(208,'Deluxe 4-bed mixed AC dorm',4),
+      dorm(202,'Superior 4-bed female AC dorm',4), dorm(102,'Superior 4-bed mixed AC dorm',4),
+      dorm(309,'Premium 4-bed mixed AC dorm',4), dorm(310,'Premium 4-bed mixed AC dorm',4), dorm(312,'Premium 4-bed mixed AC dorm',4), dorm(314,'Premium 4-bed mixed AC dorm',4), dorm(311,'Premium 6-bed AC dorm',6),
+      priv(302,'Budget double room'), priv(303,'Budget double room'), priv(307,'Budget double room'), priv(308,'Budget double room'),
+      priv(103,'Deluxe double room'), priv(106,'Deluxe double room'), priv(203,'Deluxe double room'), priv(301,'Deluxe double room'), priv(304,'Deluxe double room'), priv(305,'Deluxe double room'),
+      priv(306,'Superior double room'), priv(206,'Superior double room with bathtub',true) ],
+    guide:[
+      gd('Must-see','Hawa Mahal','The pink “Palace of Winds” with 953 windows. Best photos from the cafés opposite in the morning.','~3 km','10–15 min','9 AM – 5 PM','Hawa Mahal Jaipur'),
+      gd('Must-see','City Palace','Royal residence and museums in the heart of the old city.','~3 km','10–15 min','9:30 AM – 5 PM','City Palace Jaipur'),
+      gd('Must-see','Jantar Mantar','UNESCO-listed 18th-century observatory next to City Palace.','~3 km','10–15 min','9 AM – 4:30 PM','Jantar Mantar Jaipur'),
+      gd('Must-see','Amber Fort','Hilltop fort with the Sheesh Mahal. Go early to beat the heat and crowds.','~12 km','30–40 min','8 AM – 5:30 PM','Amber Fort Jaipur'),
+      gd('Must-see','Nahargarh Fort','Fort on the Aravalli ridge; the sunset view over the city is the classic hostel trip.','~10 km','30 min','10 AM – 5:30 PM','Nahargarh Fort Jaipur'),
+      gd('Culture','Albert Hall Museum','Indo-Saracenic museum; beautifully lit at night.','~2 km','8–10 min','9 AM – 5 PM, 7–10 PM','Albert Hall Museum Jaipur'),
+      gd('Culture','Raj Mandir Cinema','Iconic 1970s cinema. Catch a Bollywood film with a cheering crowd.','~1 km','5 min','Show times vary','Raj Mandir Cinema Jaipur'),
+      gd('Shopping','Bapu & Nehru Bazaar','Mojaris, textiles and souvenirs. Bargain politely.','~2 km','10 min','11 AM – 9 PM','Bapu Bazaar Jaipur'),
+      gd('Shopping','Johari Bazaar','Jewellery and gem street in the old city.','~3 km','15 min','11 AM – 9 PM','Johari Bazaar Jaipur'),
+      gd('Where to Eat','LMB (Laxmi Misthan Bhandar)','Classic Rajasthani sweets and thali in Johari Bazaar.','~3 km','15 min','8 AM – 11 PM','LMB Johari Bazaar Jaipur'),
+      gd('Where to Eat','Rawat Mishthan Bhandar','Famous pyaaz kachori near Sindhi Camp.','~1.5 km','5–8 min','6 AM – 10 PM','Rawat Mishthan Bhandar Jaipur') ],
+    policies:[
+      {name:'Age', text:'Guests must be 18 to 35 years old.', on:true},
+      {name:'ID at check-in', text:'Foreign nationals need a passport and valid visa. Indian guests need a valid passport. Aadhaar, driving licence, student ID and PAN are not accepted.', on:true},
+      {name:'Local residents and visitors', text:'Guests with a local (Jaipur) ID cannot stay, and visitors are not allowed on the premises.', on:true},
+      {name:'Payment', text:'Cards, UPI and bank transfer only; no cash. Card payments need a signed card authorisation form; international cards carry a 3% fee. GST extra.', on:true},
+      {name:'Smoking', text:'All rooms and dorms are non-smoking. ₹5,000 is charged per instance.', on:true},
+      {name:'Keys and damage', text:'Lost key cards cost ₹500. Damage is charged at replacement cost plus ₹5,000.', on:true},
+      {name:'Check-out', text:'Check-out is by 11:00 AM. Late check-out without notice is charged as an extra night. Extensions at the desk, 9 AM – 9 PM, subject to availability.', on:true},
+      {name:'Room service', text:'Room service is available in private rooms only, not in dorms.', on:true},
+      {name:'Pets and tobacco', text:'No pets. No tobacco chewing.', on:true} ],
+    events:[
+      {title:'Free city walking tour', when:'Daily · ask the desk for the time', price:0, desc:'Meet at reception. Our crew shows you the old city the hostel way.', on:true},
+      {title:'Rooftop hangout', when:'Every evening · 8 PM', price:0, desc:'Music, chai and new friends on the roof.', on:true},
+      {title:'Nahargarh sunset trip', when:'Ask the desk', price:0, desc:'Group cab to Nahargarh for sunset. Price shared at the desk.', on:false} ],
+  },
+  'nainital-select': {
+    prop:{ address:'Tungsten Hall, Birla Road (near Bhatt Provision Store), Mallital, Nainital, Uttarakhand 263001', maps:mapsQ('29.38820,79.46362'), landmark:'Birla Road, Mallital · near Bhatt Provision Store', airport:'Pantnagar (PGH) · ~2 hr drive', station:'Kathgodam · ~80 min drive',
+      timings:[{label:'Check-in', value:'1:00 PM'}, {label:'Check-out', value:'11:00 AM'}, {label:'Breakfast (complimentary)', value:'8:00 – 10:00 AM'}],
+      facilities:['Complimentary breakfast','Free Wi-Fi','Free parking (limited, plus parking within 50 m)','Laundry','24-hour front desk','Valley-view rooms','Family duplex rooms','No lift (stairs only)'],
+      today:[{label:'Breakfast', value:'8:00 – 10:00 AM', sub:'Complimentary'}, {label:'Naini Lake', value:'~1 km walk', sub:'Boating from Mallital'}] },
+    rooms:[ priv(104,'Deluxe room (no view)'), priv(105,'Deluxe room (no view)'), priv(106,'Deluxe room (no view)'), priv(202,'Deluxe room (no view)'), priv(204,'Deluxe room (no view)'),
+      priv(103,'Superior room (no view)'), priv(108,'Superior room (no view)'), priv(203,'Superior room (no view)'), priv(208,'Superior room (no view)'), priv(209,'Superior room (no view)'),
+      priv('COT1','Superior cottage'), priv('COT2','Superior cottage'), priv('COT3','Superior cottage'),
+      priv(101,'Superior room with valley view'), priv(102,'Superior room with valley view'), priv(107,'Superior room with valley view'), priv(109,'Superior room with valley view'), priv(207,'Superior room with valley view'),
+      priv(206,'Superior room with balcony'), priv(201,'King room with bathtub & balcony',true), priv(205,'King room with bathtub & balcony',true),
+      priv('DUP1','Duplex family room with valley view'), priv('DUP2','Duplex family room with valley view'), priv(301,'Family suite') ],
+    guide:[
+      gd('Must-see','Naini Lake & boating','The heart of Nainital. Boats from the Mallital and Tallital ends.','~1 km','10–12 min walk','Boating ~8 AM – 6 PM','Naini Lake'),
+      gd('Must-see','Mall Road','The lakeside promenade for strolls, cafés and shopping.','~1 km','10–12 min walk','All day','Mall Road Nainital'),
+      gd('Must-see','Naina Devi Temple','Revered temple on the northern shore of the lake.','~1 km','12 min walk','6 AM – 10 PM','Naina Devi Temple Nainital'),
+      gd('Nature','Snow View Point','Cable car or drive up for Himalayan views on clear days.','~1.8 km','8 min drive','10 AM – 5 PM','Snow View Point Nainital'),
+      gd('Nature','Tiffin Top (Dorothy’s Seat)','Easy hike with a sweeping valley view; go in the morning.','~4 km','15 min drive + walk','Daylight','Tiffin Top Nainital'),
+      gd('Nature','China Peak (Naina Peak)','Highest point around Nainital; a half-day trek.','~6 km','20 min drive + trek','Daylight','Naina Peak Nainital'),
+      gd('Culture','High Altitude Zoo','GB Pant High Altitude Zoo with Himalayan species.','~2 km','10 min drive','10 AM – 4:30 PM (closed Mon)','Nainital Zoo'),
+      gd('Nature','Bhimtal Lake','Quieter lake with an island aquarium; combine with Naukuchiatal.','~21 km','35 min drive','All day','Bhimtal Lake'),
+      gd('Shopping','Tibetan Market','Woollens and souvenirs near the Mallital end.','~1 km','10 min walk','10 AM – 9 PM','Tibetan Market Nainital') ],
+    policies:[
+      {name:'Check-in / check-out', text:'Check-in from 1:00 PM; check-out by 11:00 AM. Minimum check-in age is 18.', on:true},
+      {name:'ID and deposit', text:'A government photo ID is needed for every adult. A card or cash deposit may be taken for incidentals.', on:true},
+      {name:'Breakfast', text:'Complimentary breakfast is served 8:00 – 10:00 AM. Children may not be included.', on:true},
+      {name:'Smoking', text:'Smoking only in the designated area. Fines apply elsewhere.', on:true},
+      {name:'Pets', text:'Pets are not allowed.', on:true},
+      {name:'Access', text:'The property has no lift; rooms are reached by stairs.', on:true} ],
+  },
+};
+const _defaultsFor5 = defaultsFor;
+defaultsFor = p => {
+  const d = _defaultsFor5(p); if (!d.events) d.events = [];
+  const pk = p && PACKS[p.id]; if (!pk) return d;
+  if (pk.prop) d.prop = Object.assign({}, d.prop, pk.prop);
+  ['guide','policies','events'].forEach(k => { if (pk[k]) d[k] = clone(pk[k]); });
+  if (pk.rooms) d.roomList = clone(pk.rooms);
+  return d;
+};
+SISODIA.events = SISODIA.events || [];
+
+/* ---------- guest navigation per segment ---------- */
+const GUEST_TABS = {
+  luxuria:[['home','Home','home'],['services','Requests','bell'],['guide','Guide','info'],['offers','Privileges','gift'],['house','Stay','door']],
+  select: [['home','Home','home'],['services','Requests','bell'],['guide','Guide','info'],['offers','Offers','gift'],['house','Stay','door']],
+  hostel: [['home','Home','home'],['events','Events','spark'],['wall','Wall','people'],['services','Requests','bell'],['house','Stay','door']],
+};
+if (!store.get('mc_tab5')) { tab = 'home'; store.set('mc_tab5', 1); }
+tabs = function(){
+  const T = GUEST_TABS[curSeg()] || GUEST_TABS.luxuria;
+  if (!T.some(t => t[0] === tab) && !['contacts','policies','guide','offers'].includes(tab)) tab = 'home';
+  const cur = ['contacts','policies'].includes(tab) ? 'house' : tab;
+  return `<nav class="tabs" aria-label="Concierge sections">${T.map(([k,l,i]) => `<button data-tab="${k}" class="${cur===k&&!view?'on':''}" ${cur===k&&!view?'aria-current="page"':''}>${ni(i, 22)}${l}</button>`).join('')}</nav>`;
+};
+const _pHouse5 = pHouse;
+pHouse = () => _pHouse5().replace(/<\/div>$/, `<div class="chips"><button class="chip" data-tab="contacts">${ni('chat',16)} Contacts</button><button class="chip" data-tab="policies">${ni('doc',16)} House rules</button>${curSeg()==='hostel'?`<button class="chip" data-tab="guide">${ni('info',16)} ${esc((PROP&&PROP.city)||'City')} guide</button><button class="chip" data-tab="offers">${ni('gift',16)} Deals</button>`:''}</div></div>`);
+
+/* ---------- Home ---------- */
+const firstName = n => String(n || '').trim().split(/\s+/).filter(w => !HONORIFIC.test(w))[0] || 'there';
+const guestHello = () => { const v = VOICE[curSeg()] || VOICE.luxuria, h = new Date().getHours(), t = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  return curSeg() === 'hostel' ? `Hey ${firstName(S.guestName)}!` : curSeg() === 'select' ? `Good ${t}, ${firstName(S.guestName)}` : `Good ${t}, ${S.guestName}`; };
+const timingLike = re => (P.timings || []).find(t => re.test(t.label));
+function hero(){
+  const seg = curSeg(), co = S.checkOut ? tfmt(S.checkOut) : '';
+  const where = seg === 'hostel' ? `Room ${S.room}${S.bed ? ' · bed ' + S.bed : ''}` : `Room ${S.room}${S.info && S.info.cat ? ' · ' + S.info.cat : ''}`;
+  return `<section class="ghero" data-hseg="${seg}">
+    ${seg==='luxuria' ? `<span class="gstar">${star(150,'#FFF8EB')}</span>` : ''}${seg==='hostel' ? `<span class="gblob"></span>` : ''}
+    <h1>${esc(guestHello())}</h1>
+    ${seg==='hostel' ? `<p class="gscr">${esc(where)}</p>` : `<p>${esc(where)}</p>`}
+    <div class="gpills">${P.wifiName ? `<button class="gpill" data-copy="${esc(P.wifiPass||'')}">${ni('prop',14)} Wi-Fi ${esc(P.wifiName)}</button>` : ''}${co ? `<span class="gpill">${ni('clock',14)} Check-out ${esc(co)}</span>` : ''}</div>
+  </section>`;
+}
+function tileGrid(){
+  const V = VOICE[curSeg()] || VOICE.luxuria;
+  const list = services();
+  return `<div class="glabel">${esc(V.services)}</div><div class="ggrid">${list.map(v => `<button class="gtile" data-svc="${esc(v.kind)}" data-svcid="${esc(v.id)}">${ni(KIND_ICON[v.kind] || 'star', 24)}<span>${esc(v.label)}</span></button>`).join('')}
+    <button class="gtile" data-tab="services">${ni('chat', 24)}<span>${esc(V.chat)}</span></button></div>`;
+}
+function openReqStrip(){
+  const open = requests.filter(r => r.status === 'received' || r.status === 'accepted').slice(-2);
+  return open.length ? `<div class="gcard gopen"><div class="glabel" style="margin:0">In progress</div>${open.map(r => `<button class="greq" data-reqopen="${esc(r.id)}"><b>${esc(kl(r))}</b><span class="pill ${r.status}">${r.status==='accepted'?'On the way':'Received'}</span></button>`).join('')}</div>` : '';
+}
+function pHome(){
+  const seg = curSeg(), feat = offersFor().find(o => o.featured) || offersFor()[0];
+  let mid = '';
+  if (seg === 'luxuria') {
+    const dine = timingLike(/restaurant|dining/i) || timingLike(/breakfast/i);
+    mid = `${feat ? `<div class="gcard gpriv"><div class="glabel">${esc(VOICE.luxuria.offers)}</div><h3>${esc(feat.title)}</h3><p>${esc(feat.deal)}</p><button class="btn sm light" data-offer="${esc(feat.code)}">${esc(VOICE.luxuria.request)}</button></div>` : ''}
+      ${(P.today||[]).length ? `<div class="today">${P.today.map(t=>`<div class="card"><div class="eyebrow">${esc(t.label)}</div><b>${esc(t.value)}</b><span>${esc(t.sub)}</span></div>`).join('')}</div>` : ''}
+      ${dine ? `<div class="gcard"><h3>${esc(dine.label)}</h3><p>${esc(dine.value)}</p></div>` : ''}`;
+  }
+  if (seg === 'select') {
+    const bf = timingLike(/breakfast/i);
+    mid = `${bf ? `<div class="gcard"><div class="glabel">Breakfast</div><h3>${esc(bf.value)}</h3><p>${(n => n ? esc(n[0].toUpperCase() + n.slice(1)) + '. ' : '')(bf.label.replace(/^Breakfast\s*/i,'').replace(/[()·]/g,'').trim())}Leaving early? We'll pack it for you.</p><button class="btn sm ghost" data-svc="dining" data-svcid="dining">Order or pack breakfast</button></div>` : ''}
+      ${P.wifiName ? `<div class="gcard gwifi"><div><div class="glabel" style="margin:0">Work-ready Wi-Fi</div><b>${esc(P.wifiName)}</b><span>${esc(P.wifiPass||'')}</span></div><button class="btn sm" data-copy="${esc(P.wifiPass||'')}">Copy password</button></div>` : ''}
+      ${feat ? `<div class="gcard"><div class="glabel">${esc(VOICE.select.offers)}</div><h3>${esc(feat.title)}</h3><p>${esc(feat.deal)}</p><button class="btn sm ghost" data-offer="${esc(feat.code)}">See offer</button></div>` : ''}`;
+  }
+  if (seg === 'hostel') {
+    const ev = L('events')[0], posts = wallPosts.slice(0, 2);
+    mid = `${ev ? `<div class="gcard gtonight"><div class="glabel" style="margin:0"><span>Up next</span><span class="htag">${Number(ev.price) ? rupee(ev.price) : 'Free'}</span></div><h3>${esc(ev.title)}</h3><p>${esc(ev.when)} · ${goingCount(ev)} going</p><button class="btn sm" data-tab="events">See all events</button></div>` : ''}
+      <div class="gcard"><div class="glabel" style="margin:0"><span>Community wall</span><button class="linkbtn" data-tab="wall">Open</button></div>
+        ${posts.length ? posts.map(postHtml).join('') : '<p>No posts yet. Say hi to the other travellers.</p>'}</div>`;
+  }
+  return `<div class="page ghome">${hero()}${openReqStrip()}${tileGrid()}${mid}${stayCard()}</div>`;
+}
+
+/* ---------- Hostel: events + RSVPs ---------- */
+let rsvps = [], wallPosts = [];
+const evKey = ev => slug(ev.title + '-' + (ev.when || '')).slice(0, 60);
+const goingCount = ev => rsvps.filter(r => r.ev === evKey(ev)).length;
+const iAmGoing = ev => rsvps.some(r => r.ev === evKey(ev) && r.stayId === S.id);
+function pEvents(){
+  const evs = L('events');
+  return `<div class="page"><div><h1 class="t">What’s on</h1><div class="sub">Tap “I’m in” so the crew knows how many are coming.</div></div>
+    ${evs.length ? evs.map(ev => { const g = goingCount(ev), me = iAmGoing(ev); return `<div class="card hev"><div class="glabel" style="margin:0"><span>${esc(ev.when || '')}</span><span class="htag">${Number(ev.price) ? rupee(ev.price) : 'Free'}</span></div>
+      <h3>${esc(ev.title)}</h3>${ev.desc ? `<p>${esc(ev.desc)}</p>` : ''}
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn sm ${me?'ghost':''}" data-rsvp="${esc(evKey(ev))}">${me ? 'You’re in · cancel' : 'I’m in'}</button><span class="sub">${g} going${ev.cap ? ' · ' + Math.max(0, ev.cap - g) + ' spots left' : ''}</span></div></div>`; }).join('')
+      : '<div class="card empty">Nothing planned right now. Check back this evening or ask the crew.</div>'}
+  </div>`;
+}
+async function toggleRsvp(key){
+  const ev = L('events').find(e => evKey(e) === key); if (!ev) return;
+  const ref = pdb.doc(`rsvp/${key}__${S.id}`);
+  try {
+    if (iAmGoing(ev)) { await ref.set({ev:key, stayId:S.id, cancelled:true, at:Date.now()}); toast('Removed you from the list.'); }
+    else { if (ev.cap && goingCount(ev) >= ev.cap) return toast('This one is full. Ask the crew about the next one.');
+      await ref.set({ev:key, stayId:S.id, name:firstName(S.guestName), room:S.room, title:ev.title, at:Date.now()}); toast(`You’re in: ${ev.title}`); }
+  } catch(e){ toast('Didn’t save. Try again.'); }
+}
+
+/* ---------- Hostel: community wall (first names only, opt-in) ---------- */
+const postHtml = p => `<div class="hpost"><i>${esc((p.name||'?')[0].toUpperCase())}</i><div><b>${esc(p.name)}</b>${p.from ? ` <small>· ${esc(p.from)}</small>` : ''}${p.crew ? ' <span class="htag">Crew</span>' : ''}<br>${esc(p.text)}<small class="hwhen">${ago(p.at)}</small></div>${S && p.stayId === S.id ? `<button class="linkbtn" data-wdel="${esc(p.id)}">Delete</button>` : S && !p.crew ? `<button class="linkbtn" data-wrep="${esc(p.id)}" aria-label="Report post">Report</button>` : ''}</div>`;
+function pWall(){
+  const opted = !!S.wallOptIn;
+  return `<div class="page"><div><h1 class="t">Community wall</h1><div class="sub">Travellers staying at ${esc(P.name)} right now. First names only.</div></div>
+    <div class="card hoptin"><label class="hswitch" for="wopt"><input type="checkbox" id="wopt" ${opted?'checked':''}><span></span></label><div><b>Show me on the wall</b><div class="sub">${opted ? `You appear as <b>${esc(firstName(S.guestName))}</b>. Turn it off any time; your posts disappear.` : 'Off: nobody sees your name. Turn it on to post and meet people.'}</div></div></div>
+    ${opted ? `<form class="card hcompose" id="wform"><input id="wfrom" maxlength="30" placeholder="Where are you from? (optional)" value="${esc(S.wallFrom||'')}" aria-label="Where are you from"><textarea id="wtext" maxlength="280" rows="2" placeholder="Plans for tonight? Sharing a cab? Say hi…" aria-label="Your post"></textarea><button class="btn sm" type="submit">Post</button></form>` : ''}
+    <div class="card" style="padding:4px 16px">${wallPosts.length ? wallPosts.map(postHtml).join('') : '<p class="sub" style="padding:12px 0">No posts yet. Be the first.</p>'}</div>
+  </div>`;
+}
+
+/* ---------- wire into the guest app ---------- */
+const _render5 = render;
+render = function(){
+  if (!S) return;
+  if (!view && ['home','events','wall'].includes(tab)) {
+    const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id;
+    const body = tab === 'home' ? pHome() : tab === 'events' ? pEvents() : pWall();
+    $app.innerHTML = header() + `<main>${body}</main>` + tabs();
+    if (aid && document.getElementById(aid)) document.getElementById(aid).focus({preventScroll:true});
+    window.scrollTo(0, y); return;
+  }
+  return _render5();
+};
+const _startSession5 = startSession;
+startSession = function(stay){
+  if (!S || S.id !== stay.id) { tab = 'home'; view = null; }
+  _startSession5(stay);
+  if (curSeg() !== 'hostel') return;
+  unsubs.push(live(pdb.collection('rsvp').where('at', '>=', since(3)), q => { rsvps = q.docs.map(d => ({id:d.id, ...d.data()})).filter(r => !r.cancelled); soon(render); }, 'rsvp'));
+  unsubs.push(live(pdb.collection('wall').where('at', '>=', since(3)), q => { wallPosts = q.docs.map(d => ({id:d.id, ...d.data()})).filter(p => !p.hidden && !p.removed && (p.crew || p.optIn !== false)).sort((a, b) => b.at - a.at).slice(0, 60); soon(render); }, 'wall'));
+};
+$app.addEventListener('click', async e => {
+  if (!S) return; const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.rsvp) { b.disabled = true; await toggleRsvp(d.rsvp); return; }
+  if (d.wdel) { try { await pdb.doc('wall/' + d.wdel).update({removed:true}); } catch(err){ toast('Couldn’t delete. Try again.'); } return; }
+  if (d.wrep) { try { await pdb.doc('wall/' + d.wrep).update({reported:true, reportedAt:Date.now()}); toast('Thanks. The crew will take a look.'); } catch(err){} return; }
+});
+$app.addEventListener('change', async e => {
+  if (!S || e.target.id !== 'wopt') return; const on = e.target.checked;
+  try { await pdb.doc('stays/' + S.id).update({wallOptIn:on}); S.wallOptIn = on;
+    if (!on) wallPosts.filter(p => p.stayId === S.id).forEach(p => pdb.doc('wall/' + p.id).update({removed:true}).catch(() => {}));
+    render(); } catch(err){ toast('Didn’t save. Try again.'); }
+});
+$app.addEventListener('submit', async e => {
+  if (!S || e.target.id !== 'wform') return; e.preventDefault();
+  const text = document.getElementById('wtext').value.trim(), from = document.getElementById('wfrom').value.trim().slice(0, 30);
+  if (!text) return; if (/\b\d{10}\b|@\w|https?:\/\//i.test(text)) return toast('For everyone’s safety, no phone numbers, emails or links on the wall.');
+  try { await pdb.collection('wall').add({stayId:S.id, name:firstName(S.guestName), from, text:text.slice(0, 280), at:Date.now(), optIn:true});
+    if (from !== (S.wallFrom || '')) pdb.doc('stays/' + S.id).update({wallFrom:from}).catch(() => {});
+    document.getElementById('wtext').value = ''; } catch(err){ toast('Didn’t post. Try again.'); }
+});
+
+/* ---------- admin: Events editor + wall moderation (Hostel properties) ---------- */
+SCHEMA.events = [['title','Event','text',2],['when','When (e.g. Tonight · 9 PM)','text'],['price','Price ₹ (0 = free)','number'],['cap','Max people (0 = no limit)','number'],['desc','Description','textarea',3],['on','Show to guests','bool']];
+SECTIONS.push(['events','Events','Events board for guests; they tap “I’m in”'], ['wall','Community wall','See and hide posts on the guest wall']);
+NAV_GROUPS[2][1].push('events', 'wall'); COPYABLE.push('events');
+const _secAllowed5 = secAllowed;
+secAllowed = sec => (sec === 'events' || sec === 'wall') ? (curSeg() === 'hostel' && _secAllowed5('services')) : _secAllowed5(sec);
+let aWall = [], aRsvp = [];
+const _startAdmin5 = startAdmin;
+startAdmin = function(a){
+  _startAdmin5(a);
+  if (curSeg() !== 'hostel') return;
+  aUnsubs.push(live(pdb.collection('wall').where('at', '>=', since(7)), q => { aWall = q.docs.map(d => ({id:d.id, ...d.data()})).sort((x, y) => y.at - x.at); if (aSec === 'wall' && !typing()) soon(renderAdmin); }, 'admin wall'));
+  aUnsubs.push(live(pdb.collection('rsvp').where('at', '>=', since(7)), q => { aRsvp = q.docs.map(d => d.data()).filter(r => !r.cancelled); if (aSec === 'events' && !typing()) soon(renderAdmin); }, 'admin rsvp'));
+};
+function wallView(){
+  const rep = aWall.filter(p => p.reported && !p.hidden && !p.removed);
+  return `<div class="ahead"><div><h1 class="t">Community wall</h1><div class="sub">Last 7 days · ${aWall.filter(p=>!p.hidden&&!p.removed).length} visible · ${rep.length} reported</div></div></div>
+    <form class="card" id="crewform" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end"><label class="field af" for="crewtext" style="flex:1;min-width:240px">Post as the crew (pinned for guests to see)<input id="crewtext" maxlength="280" placeholder="e.g. Free walking tour starts 10 AM at reception"></label><button class="btn sm" type="submit">Post</button></form>
+    <div class="card" style="padding:0;overflow-x:auto"><table class="atable"><thead><tr><th>When</th><th>Guest</th><th>Post</th><th>Status</th><th></th></tr></thead><tbody>
+      ${aWall.map(p => `<tr class="${p.hidden||p.removed?'off':''}"><td style="white-space:nowrap">${fmtDT(p.at)}</td><td>${esc(p.name)}${p.crew?' <small>(crew)</small>':''}${p.from?`<br><small>${esc(p.from)}</small>`:''}</td><td>${esc(p.text)}</td><td>${p.removed?'<small>Deleted by guest</small>':p.hidden?'<span class="pill cancelled">Hidden</span>':p.reported?'<span class="pill late">Reported</span>':'<span class="pill completed">Visible</span>'}</td><td>${p.removed?'':`<div class="acts"><button class="btn sm ghost" data-whide="${esc(p.id)}" data-v="${p.hidden?'0':'1'}">${p.hidden?'Show again':'Hide'}</button></div>`}</td></tr>`).join('') || '<tr><td colspan="5" class="empty" style="padding:16px">No posts in the last 7 days.</td></tr>'}
+    </tbody></table></div>`;
+}
+const _listEditor5 = listEditor;
+listEditor = sec => { const h = _listEditor5(sec); if (sec !== 'events') return h;
+  const counts = L('events').map(ev => `<span class="chip" style="height:30px;font-size:12px">${esc(ev.title)} · ${aRsvp.filter(r => r.ev === evKey(ev)).length} going</span>`).join('');
+  return h.replace('<div class="alist">', `${counts ? `<div class="card"><div class="eyebrow" style="margin-bottom:6px">Going (last 7 days)</div><div class="chips">${counts}</div></div>` : ''}<div class="alist">`); };
+$app.addEventListener('click', async e => { if (!AD) return; const b = e.target.closest('[data-whide]'); if (!b) return;
+  try { await pdb.doc('wall/' + b.dataset.whide).update({hidden: b.dataset.v === '1', moderatedBy:ME.name, moderatedAt:Date.now()}); } catch(err){ toast('Not saved.'); } });
+$app.addEventListener('submit', async e => { if (!AD || e.target.id !== 'crewform') return; e.preventDefault(); const t = document.getElementById('crewtext').value.trim(); if (!t) return;
+  try { await pdb.collection('wall').add({name:'The crew', crew:true, text:t.slice(0, 280), at:Date.now(), by:ME.code}); e.target.reset(); toast('Posted to the wall.'); } catch(err){ toast('Not posted.'); } });
 
 /* ---------- BOOT ---------- */
 window.addEventListener('hashchange', () => location.reload());
