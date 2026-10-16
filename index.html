@@ -531,6 +531,22 @@ tr.off td{opacity:.55}
 @keyframes softpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
 @media (prefers-reduced-motion:reduce){.alarmov .pulse{animation:none}}
 
+/* ===== Phase 6.1 + 7 ===== */
+.gnotif{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;background:var(--tint)!important}
+.gnotif p{margin:4px 0 0}
+.anfilters{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.anfilters .chip{height:34px;font-size:13px}
+.dl{font-size:12px;color:var(--muted)}.dl.good{color:#1E6B30}.dl.bad{color:#9A2F0E}
+.antrend{width:100%;min-width:560px;height:auto;display:block}
+.antrend .hit{cursor:pointer}
+.antable{min-width:1100px}.antable td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.angrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.anbar{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 36px;gap:10px;align-items:center;font-size:13px;padding:5px 0}
+.anbar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.anbar i{display:block;height:10px;border-radius:0 4px 4px 0;background:#1F4E9C}
+.anbar b{text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:900px){.angrid{grid-template-columns:minmax(0,1fr)}}
+
 </style>
 </head>
 <body>
@@ -738,13 +754,13 @@ function startSession(stay){
   unsubs.push(live(pdb.collection('requests').where('stayId','==',S.id), q => {
     const prev = new Map(requests.map(r=>[r.id,r.status]));
     requests = q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.receivedAt-b.receivedAt);
-    requests.forEach(r => { const p = prev.get(r.id); if (p && p!==r.status) toast(`${kl(r)}: ${r.status==='accepted'?'accepted by our team':r.status==='completed'?'completed':r.status}`); });
+    requests.forEach(r => { const p = prev.get(r.id); if (p && p!==r.status && (r.status==='accepted' || r.status==='completed')) gNotify(kl(r), r.status==='accepted' ? `accepted${r.acceptedBy ? ' by ' + r.acceptedBy.split(' ')[0] : ''}, on the way` : 'done'); });
     soon(render);
   }, 'requests'));
   unsubs.push(live(pdb.collection('messages').where('stayId','==',S.id), q => {
     const before = messages.length;
     messages = q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.at-b.at);
-    if (before && messages.length > before && messages[messages.length-1].from==='staff') toast('New message from reception');
+    if (S.__msgReady && messages.length > before && messages[messages.length-1].from==='staff') gNotify('Reply from ' + (curSeg()==='hostel' ? 'the crew' : 'reception'), String(messages[messages.length-1].text || '').slice(0, 90)); S.__msgReady = true;
     soon(render);
   }, 'messages'));
   render();
@@ -1203,7 +1219,7 @@ function startStaff(st){
   sUnsubs.push(live(pdb.collection('messages').where('at','>=',since(30)), q => {
     const before = new Set(sMsg.map(m=>m.id));
     sMsg = q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.at-b.at);
-    if (!firstMsg && sMsg.some(m => !before.has(m.id) && m.from==='guest')) { chime(true); if (!(sTab==='chats' && sRoom)) toastS('New guest message'); }
+    if (!firstMsg && sMsg.some(m => !before.has(m.id) && m.from==='guest')) { chime(true); if (!(sTab==='chats' && sRoom)) toastS('New guest message' + (sMsg.length ? ' · Room ' + sMsg[sMsg.length-1].room : '')); }
     firstMsg = false; markRead(); soon(renderStaff);
   }, 'staff messages'));
   sUnsubs.push(live(pdb.collection('stays'), q => { sStays = q.docs.map(d=>({id:d.id,...d.data()})); sStaysOk = true; sweep(sStays, sReq, sLoaded); soon(renderStaff); }, 'staff stays'));
@@ -1504,8 +1520,8 @@ function renderAdmin(){
   if (!secAllowed(aSec)) aSec = SECTIONS.map(x=>x[0]).find(secAllowed) || 'account';
   const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id; const selS = ae && typeof ae.selectionStart==='number' ? ae.selectionStart : null;
   const inH = aStays.filter(s=>s.status==='in-house').length; const open = aReq.filter(r=>r.status==='received'||r.status==='accepted').length;
-  { const want = aSec==='hq' ? 'master' : curSeg(); if (SKIN_NOW !== want) skin(want, 'console'); }
-  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : ['live','chats','roomsboard'].includes(aSec) ? liveView() : listEditor(aSec);
+  { const want = (aSec==='hq' || aSec==='analytics') ? 'master' : curSeg(); if (SKIN_NOW !== want) skin(want, 'console'); }
+  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : ['live','chats','roomsboard'].includes(aSec) ? liveView() : aSec==='analytics' ? analyticsView() : listEditor(aSec);
   $app.className = 'app staff msapp';
   $app.innerHTML = `<div class="ms">${msSide()}<div class="ms-main">${msTop()}<main class="spage">${body}</main></div></div>${msPopHtml()}${copyDialog()}
     ${shareOverlay()}`;
@@ -3417,6 +3433,200 @@ chime = function(single){
 };
 const _switchProp6 = switchProp;
 switchProp = async function(pid){ await _switchProp6(pid); if (AD && ST) startStaff(ST); };
+
+
+/* =================================================================
+   PHASE 6.1 — tighter notifications, both ways
+   guest → staff : every request, event sign-up, trip request and wall report lands in Live requests and rings
+   staff → guest : accept, complete and every reply gives the guest ONE soft notification
+   ================================================================= */
+Object.assign(DEPT, {event:'Front Office', report:'Front Office'});
+Object.assign(KIND_LABEL, {event:'Event sign-up', report:'Wall post reported'});
+Object.assign(PREFIX, {event:'EV', report:'RP'});
+Object.assign(KIND_ICON, {event:'spark'});
+let gAudio = null, gUnseen = 0;
+document.addEventListener('pointerdown', () => { if (!S) return; try { gAudio = gAudio || new (window.AudioContext || window.webkitAudioContext)(); if (gAudio.state === 'suspended') gAudio.resume(); } catch(e){} }, true);
+function gDing(){ try { if (!gAudio) return; const t = gAudio.currentTime; [[784, 0], [1046.5, 0.16]].forEach(([f, d]) => { const o = gAudio.createOscillator(), g = gAudio.createGain(); o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(gAudio.destination); g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.12, t + d + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.9); o.start(t + d); o.stop(t + d + 0.95); }); } catch(e){} }
+function gNotify(title, body){
+  toast(body ? `${title}: ${body}` : title); gDing();
+  try { if (navigator.vibrate) navigator.vibrate(120); } catch(e){}
+  if (document.hidden) { gUnseen++; document.title = `(${gUnseen}) ${title} · ${P.name}`;
+    try { if ('Notification' in window && Notification.permission === 'granted') new Notification(`${P.name} · ${title}`, {body: body || '', tag: 'mc-' + PID, renotify: true}); } catch(e){} }
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && gUnseen) { gUnseen = 0; document.title = `${P.name} · Moustache Concierge`; } });
+const STATUS_WORD = { accepted:'accepted, on the way', completed:'done', cancelled:'cancelled', closed:'closed' };
+const notifCard = () => ('Notification' in window && Notification.permission === 'default' && window.isSecureContext) ? `<div class="gcard gnotif"><div><b>Get a ping when we reply</b><p>We’ll let you know the moment the team accepts, finishes or answers, even if this tab is in the background.</p></div><button class="btn sm" data-gnotif="1">Turn on</button></div>` : '';
+$app.addEventListener('click', async e => { const b = e.target.closest('[data-gnotif]'); if (!b || !S) return; try { const r = await Notification.requestPermission(); toast(r === 'granted' ? 'Done. We’ll ping you when the team replies.' : 'No problem. You’ll still see updates here.'); } catch(err){} render(); });
+const _pHome7 = pHome;
+pHome = () => _pHome7().replace('<div class="glabel">', notifCard() + '<div class="glabel">');
+const _vRequest7 = vRequest;
+vRequest = () => { const h = _vRequest7(); const c = notifCard(); return c ? h.replace('<div class="card" style="display:flex;flex-direction:column;gap:14px">', c + '<div class="card" style="display:flex;flex-direction:column;gap:14px">') : h; };
+
+/* ---------- trips & tours: always bookable, even with no fixed routes ---------- */
+vTaxi = function(){
+  const list = L('taxi'), custom = draft.pick === -1 || (!list.length);
+  if (!list.length) draft.pick = -1;
+  const inner = `<div style="display:flex;flex-direction:column;gap:8px">${list.map((t,i)=>`<label class="opt ${draft.pick==i?'on':''}"><input type="radio" name="taxi" value="${i}" ${draft.pick==i?'checked':''}><span class="nm">${esc(t.name)}<small>${esc(t.type)} · ${esc(t.car)}${t.dist?' · '+esc(t.dist):''}</small></span><span class="pr">${rupee(t.fare)}</span></label>`).join('')}
+      <label class="opt ${custom?'on':''}"><input type="radio" name="taxi" value="-1" ${custom?'checked':''}><span class="nm">${curSeg()==='hostel'?'Plan a trip or cab for me':'Something else'}<small>Tell us where and when; we confirm the fare in the chat</small></span></label></div>
+    <div class="grid2"><label class="field" for="tday">Day<select id="tday"><option ${draft.day!=='Tomorrow'?'selected':''}>Today</option><option ${draft.day==='Tomorrow'?'selected':''}>Tomorrow</option></select></label>
+    <label class="field" for="ttime">Pick-up time<input id="ttime" type="time" value="${esc(draft.time||'')}"></label></div>
+    <textarea class="note" id="note" aria-label="Notes" placeholder="${custom ? 'Where to? How many people? e.g. Amber Fort for 3, back by 2 PM' : 'Flight number, luggage, where you want to go…'}">${esc(draft.note||'')}</textarea>`;
+  const t = list[draft.pick];
+  return sheet(curSeg()==='hostel'?'Trips &amp; tours':'Taxi &amp; tours', 'Arranged by the front desk', inner,
+    `<div class="sendbar"><div><b>${t ? rupee(t.fare) : custom ? 'Fare confirmed in chat' : 'Pick a ride'}</b><span>${t?esc(t.car):''}${draft.time?' · '+esc(draft.day||'Today')+' '+esc(draft.time):''}</span></div><button class="btn" data-submit="taxi" ${(t && draft.time) || custom ? '' : 'disabled'}>${custom ? 'Send request' : 'Book ride'}</button></div>`);
+};
+const _doSubmit7 = doSubmit;
+doSubmit = async kind => {
+  if (kind === 'taxi' && (draft.pick === -1 || !L('taxi').length)) {
+    const note = (draft.note || '').trim(); if (!note) { toast('Tell us where you’d like to go.'); const b = document.querySelector('[data-submit=taxi]'); if (b) b.disabled = false; return; }
+    return submitRequest('taxi', {items:[{name:'Trip / cab request', qty:1}], note:note.slice(0,500), when:`${draft.day||'Today'}${draft.time?' '+draft.time:''}`, title:'Trip / cab request', targetMin:10});
+  }
+  return _doSubmit7(kind);
+};
+
+/* ---------- event sign-ups and wall reports reach the staff console ---------- */
+toggleRsvp = async function(key){
+  const ev = L('events').find(e => evKey(e) === key); if (!ev) return;
+  const ref = pdb.doc(`rsvp/${key}__${S.id}`);
+  try {
+    if (iAmGoing(ev)) {
+      const cur = rsvps.find(r => r.ev === key && r.stayId === S.id);
+      await ref.set({ev:key, stayId:S.id, cancelled:true, at:Date.now()});
+      if (cur && cur.reqId) pdb.doc('requests/' + cur.reqId).update({status:'cancelled', cancelledAt:Date.now()}).catch(() => {});
+      toast('Removed you from the list.');
+    } else {
+      if (ev.cap && goingCount(ev) >= ev.cap) return toast('This one is full. Ask the crew about the next one.');
+      const reqId = 'EV-' + Date.now().toString(36).toUpperCase().slice(-5);
+      await pdb.doc('requests/' + reqId).set({stayId:S.id, room:S.room, bed:S.bed || null, guestName:S.guestName, kind:'event', dept:'Front Office', status:'received', receivedAt:Date.now(), acceptedAt:null, completedAt:null, rating:null, note:'', items:[{name:ev.title, qty:1, price:Number(ev.price)||0}], total:Number(ev.price)||0, when:ev.when || '', title:ev.title, targetMin:30});
+      await ref.set({ev:key, stayId:S.id, name:firstName(S.guestName), room:S.room, title:ev.title, at:Date.now(), reqId});
+      toast(`You’re in: ${ev.title}. The crew will confirm.`);
+    }
+  } catch(e){ toast('Didn’t save. Try again.'); }
+};
+$app.addEventListener('click', e => { if (!S) return; const b = e.target.closest('[data-wrep]'); if (!b) return; const p = wallPosts.find(x => x.id === b.dataset.wrep); if (!p) return;
+  pdb.doc('requests/RP-' + Date.now().toString(36).toUpperCase().slice(-5)).set({stayId:S.id, room:S.room, guestName:S.guestName, kind:'report', dept:'Front Office', status:'received', receivedAt:Date.now(), acceptedAt:null, completedAt:null, items:[{name:`“${String(p.text).slice(0,120)}” by ${p.name}`, qty:1}], total:0, title:'Wall post reported', note:'Check it in Admin → Community wall', targetMin:15}).catch(() => {}); }, true);
+
+/* ============================================================
+   PHASE 7 — brand analytics: compare properties and segments over time, export to Excel
+   ============================================================ */
+SECTIONS.push(['analytics','Brand analytics','Compare properties and segments over time; export to Excel']);
+NAV_GROUPS.find(g => g[0] === 'Brand')[1].unshift('analytics');
+const _secAllowed7 = secAllowed;
+secAllowed = sec => sec === 'analytics' ? !!ME && (ME.role === 'brand' || ME.role === 'gm') : _secAllowed7(sec);
+Object.assign(NI, { analytics:'M4 20V10M10 20V4M16 20v-7M22 20H2', download:'M12 4v11M7 10l5 5 5-5M5 20h14' });
+const AN_C = { luxuria:'#1F4E9C', select:'#2E8B57', hostel:'#D9822B' };   /* validated: light-mode categorical, direct-labelled */
+let an = { range:'month', seg:'all', busy:false, at:0, data:{}, err:{} };
+function anRange(){
+  const now = new Date(), d0 = new Date(now.getFullYear(), now.getMonth(), 1);
+  if (an.range === 'month') { const from = d0.getTime(), len = Date.now() - from; return {from, to:Date.now(), pFrom:new Date(now.getFullYear(), now.getMonth()-1, 1).getTime(), pTo:new Date(now.getFullYear(), now.getMonth()-1, 1).getTime() + len, label:now.toLocaleString('en-IN',{month:'long', year:'numeric'}) + ' so far'}; }
+  if (an.range === 'last') { const from = new Date(now.getFullYear(), now.getMonth()-1, 1).getTime(), to = d0.getTime(); return {from, to, pFrom:new Date(now.getFullYear(), now.getMonth()-2, 1).getTime(), pTo:from, label:new Date(from).toLocaleString('en-IN',{month:'long', year:'numeric'})}; }
+  const days = an.range === '90' ? 90 : 30, to = Date.now(), from = to - days*864e5; return {from, to, pFrom:from - days*864e5, pTo:from, label:`Last ${days} days`};
+}
+async function loadAn(force){
+  if (an.busy || (!force && Date.now() - an.at < 120000)) return; an.busy = true; soon(renderAdmin);
+  const R = anRange(), props = myProps();
+  const one = async p => { const C = c => db.collection(`${c}__${p.id}`);
+    try { const [rq, fb, st] = await Promise.all([C('requests').where('receivedAt','>=',R.pFrom).get(), C('feedback').get(), C('stays').get()]);
+      an.data[p.id] = {reqs:rq.docs.map(d => ({id:d.id, ...d.data()})), fb:fb.docs.map(d => d.data()), stays:st.docs.map(d => ({id:d.id, ...d.data()}))}; delete an.err[p.id];
+    } catch(e){ an.err[p.id] = String(e && (e.code || e.message) || 'error'); } };
+  for (let i = 0; i < props.length; i += 5) await Promise.all(props.slice(i, i + 5).map(one));
+  an.at = Date.now(); an.busy = false; if (aSec === 'analytics') soon(renderAdmin);
+}
+function anMetrics(d, from, to){
+  if (!d) return null;
+  const reqs = d.reqs.filter(r => r.receivedAt >= from && r.receivedAt < to && r.status !== 'cancelled');
+  const acted = reqs.filter(r => r.acceptedAt), acc = acted.map(r => (r.acceptedAt - r.receivedAt)/60000), done = reqs.filter(r => r.completedAt), comp = done.map(r => (r.completedAt - r.receivedAt)/60000);
+  const onTime = acted.filter(r => (r.acceptedAt - r.receivedAt)/60000 <= 3).length;
+  const fb = d.fb.filter(f => f.at >= from && f.at < to), stays = d.stays.filter(s => (s.checkIn||0) >= from && (s.checkIn||0) < to);
+  const nights = d.stays.reduce((a, s) => { const a0 = Math.max(s.checkIn||0, from), b0 = Math.min(s.checkedOutAt || s.checkOut || to, to); return a + Math.max(0, (b0 - a0)/864e5); }, 0);
+  const revenue = reqs.reduce((a, r) => a + (r.total || 0), 0);
+  const m = {reqs:reqs.length, acc:acc.length ? acc.reduce((a,b)=>a+b,0)/acc.length : null, comp:comp.length ? comp.reduce((a,b)=>a+b,0)/comp.length : null,
+    onTime:acted.length ? Math.round(onTime*100/acted.length) : null, missed:reqs.filter(r => r.status === 'closed').length, rating:fb.length ? fb.reduce((a,f)=>a+(f.overall||0),0)/fb.length : null, fbN:fb.length,
+    revenue, perNight:nights >= 1 ? revenue/nights : null, nights:Math.round(nights), arrivals:stays.length, adoption:stays.length ? Math.round(stays.filter(s => s.firstLoginAt).length*100/stays.length) : null,
+    offers:reqs.filter(r => r.offer || r.kind === 'offer').length, reqList:reqs};
+  m.missRate = m.reqs ? m.missed*100/m.reqs : 0;
+  const parts = [[m.onTime, .35], [m.rating != null ? m.rating*20 : null, .35], [m.reqs ? 100 - Math.min(100, m.missRate*5) : null, .15], [m.adoption, .15]].filter(x => x[0] != null);
+  const w = parts.reduce((a, x) => a + x[1], 0); m.score = (m.reqs || m.fbN) && w ? Math.round(parts.reduce((a, x) => a + x[0]*x[1], 0) / w) : null;
+  return m;
+}
+const delta = (c, p, better, unit, dec) => { if (c == null || p == null || (p === 0 && c === 0)) return '<span class="dl">–</span>'; const d = c - p; if (Math.abs(d) < (dec ? 0.05 : 0.5)) return '<span class="dl">no change</span>';
+  const good = better === 'up' ? d > 0 : d < 0; return `<span class="dl ${good ? 'good' : 'bad'}">${d > 0 ? '▲' : '▼'} ${dec ? Math.abs(d).toFixed(dec) : Math.round(Math.abs(d)).toLocaleString('en-IN')}${unit || ''} vs previous</span>`; };
+function trendSvg(series, buckets, labels){
+  const W = 760, H = 220, L = 34, Rr = 70, T = 12, B = 26, max = Math.max(4, ...series.flatMap(s => s.vals));
+  const nice = Math.ceil(max / 4) * 4, x = i => L + (buckets > 1 ? i * (W - L - Rr) / (buckets - 1) : 0), y = v => T + (H - T - B) * (1 - v / nice);
+  const grid = [0, 1, 2, 3, 4].map(k => { const v = nice * k / 4; return `<line x1="${L}" x2="${W-Rr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`; }).join('');
+  const step = Math.ceil(buckets / 8), xl = labels.map((l, i) => i % step === 0 || i === buckets - 1 ? `<text x="${x(i)}" y="${H-6}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(l)}</text>` : '').join('');
+  const lastY = {}; [...series].sort((a, b) => y(a.vals[a.vals.length-1]) - y(b.vals[b.vals.length-1])).forEach((s, i, arr) => { let v = y(s.vals[s.vals.length-1]) + 4; if (i && v - lastY[arr[i-1].name] < 15) v = lastY[arr[i-1].name] + 15; lastY[s.name] = v; });
+  const lines = series.map(s => { const pts = s.vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' '); const last = s.vals.length - 1;
+    return `<polyline points="${pts}" fill="none" stroke="${s.c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${s.vals.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="9" fill="transparent" class="hit"><title>${esc(s.name)} · ${esc(labels[i])}: ${v} requests</title></circle>`).join('')}<circle cx="${x(last)}" cy="${y(s.vals[last])}" r="4" fill="${s.c}" stroke="var(--white)" stroke-width="2"/><text x="${x(last)+8}" y="${lastY[s.name]}" font-size="12" font-weight="600" fill="var(--ink)">${esc(s.name)}</text>`; }).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" class="antrend" role="img" aria-label="Requests over time by segment">${grid}${xl}${lines}</svg>`;
+}
+function analyticsView(){
+  if (!an.at && !an.busy) loadAn(true);
+  const R = anRange(), props = myProps().filter(p => an.seg === 'all' || p.segment === an.seg);
+  const rows = props.map(p => ({p, c:anMetrics(an.data[p.id], R.from, R.to), pv:anMetrics(an.data[p.id], R.pFrom, R.pTo)})).filter(r => r.c);
+  const agg = which => { const ms = rows.map(r => r[which]); const sum = k => ms.reduce((a, m) => a + (m[k] || 0), 0); const wavg = (k, w) => { let s = 0, n = 0; ms.forEach(m => { if (m[k] != null) { s += m[k]*(m[w]||1); n += (m[w]||1); } }); return n ? s/n : null; };
+    return {reqs:sum('reqs'), missed:sum('missed'), revenue:sum('revenue'), fbN:sum('fbN'), offers:sum('offers'), arrivals:sum('arrivals'), acc:wavg('acc','reqs'), onTime:wavg('onTime','reqs'), rating:wavg('rating','fbN'), adoption:wavg('adoption','arrivals')}; };
+  const A = agg('c'), PV = agg('pv');
+  const tile = (l, v, d, sub) => `<div class="card hqk"><div class="eyebrow">${l}</div><b>${v}</b><span>${d}</span>${sub ? `<span>${sub}</span>` : ''}</div>`;
+  /* trend buckets */
+  const days = Math.max(1, Math.ceil((R.to - R.from) / 864e5)), wk = days > 35, bms = wk ? 7*864e5 : 864e5, n = Math.max(1, Math.ceil((R.to - R.from) / bms));
+  const labels = Array.from({length:n}, (_, i) => new Date(R.from + i*bms).toLocaleDateString('en-IN', {day:'numeric', month:'short'}));
+  const series = ['luxuria','select','hostel'].filter(k => an.seg === 'all' || an.seg === k).map(k => ({name:SEG_NAME(k), c:AN_C[k], vals:labels.map((_, i) => rows.filter(r => r.p.segment === k).reduce((a, r) => a + r.c.reqList.filter(q => q.receivedAt >= R.from + i*bms && q.receivedAt < R.from + (i+1)*bms).length, 0))})).filter(s => s.vals.some(v => v));
+  /* departments + top items */
+  const all = rows.flatMap(r => r.c.reqList);
+  const depts = [...new Set(all.map(r => r.dept))].map(dp => { const l = all.filter(r => r.dept === dp), a = l.filter(r => r.acceptedAt).map(r => (r.acceptedAt - r.receivedAt)/60000), c = l.filter(r => r.completedAt).map(r => (r.completedAt - r.receivedAt)/60000);
+    return {dp, n:l.length, a:a.length ? a.reduce((x,y)=>x+y,0)/a.length : null, c:c.length ? c.reduce((x,y)=>x+y,0)/c.length : null, missed:l.filter(r => r.status === 'closed').length}; }).sort((a, b) => b.n - a.n);
+  const items = {}; all.forEach(r => (r.items || []).forEach(i => { if (!i || !i.name || /GSTIN|^Pay |settled|Key card|GST invoice|@/.test(i.name)) return; const k = i.name; (items[k] = items[k] || {n:0, props:new Set(), kind:r.kind}); items[k].n += (i.qty || 1); items[k].props.add(r.prop || ''); }));
+  const top = Object.entries(items).sort((a, b) => b[1].n - a[1].n).slice(0, 10), topMax = top.length ? top[0][1].n : 1;
+  const league = [...rows].sort((a, b) => (b.c.score ?? -1) - (a.c.score ?? -1));
+  return `<div class="ahead"><div><h1 class="t">Brand analytics</h1><div class="sub">${esc(R.label)} · compared with the previous period · ${props.length} properties${an.busy ? ' · loading…' : an.at ? ' · updated ' + tfmt(an.at) : ''}</div></div>
+    <div class="abar"><button class="btn sm" data-anx="1" ${an.busy || !rows.length ? 'disabled' : ''}>${ni('download',14)} Export to Excel</button><button class="btn sm ghost" data-anrefresh="1">${ni('refresh',14)} Refresh</button></div></div>
+    <div class="anfilters"><div class="chips">${[['month','This month'],['last','Last month'],['30','30 days'],['90','90 days']].map(([k,l]) => `<button class="chip ${an.range===k?'on':''}" data-anrange="${k}">${l}</button>`).join('')}</div>
+      <div class="chips">${[['all','All segments'],['luxuria','Luxuria'],['select','Select'],['hostel','Hostel']].filter(([k]) => k === 'all' || myProps().some(p => p.segment === k)).map(([k,l]) => `<button class="chip ${an.seg===k?'on':''}" data-anseg="${k}">${k!=='all'?`<i class="segdot" style="background:${AN_C[k]}"></i> `:''}${l}</button>`).join('')}</div></div>
+    ${Object.keys(an.err).length ? `<div class="card note2">Couldn’t load: ${Object.keys(an.err).map(id => esc((PROPS.find(p => p.id === id) || {name:id}).name)).join(', ')}.</div>` : ''}
+    <div class="hqkpis">
+      ${tile('Guest requests', A.reqs.toLocaleString('en-IN'), delta(A.reqs, PV.reqs, 'up'))}
+      ${tile('Accepted on time', A.onTime == null ? '–' : Math.round(A.onTime) + '%', delta(A.onTime, PV.onTime, 'up', ' pts'), A.acc == null ? '' : `avg ${A.acc.toFixed(1)} min to accept`)}
+      ${tile('Missed requests', A.missed, delta(A.missed, PV.missed, 'down'))}
+      ${tile('Guest rating', A.rating == null ? '–' : A.rating.toFixed(2) + ' ★', delta(A.rating, PV.rating, 'up', '', 2), `${A.fbN} reviews`)}
+      ${tile('Revenue via app', rupee(A.revenue), delta(A.revenue, PV.revenue, 'up'), `${A.offers} offer bookings`)}
+      ${tile('Guests using the app', A.adoption == null ? '–' : Math.round(A.adoption) + '%', delta(A.adoption, PV.adoption, 'up', ' pts'), `${A.arrivals} arrivals`)}
+    </div>
+    <div class="card"><h2 class="sh" style="margin:0 0 4px">Requests ${wk ? 'per week' : 'per day'}</h2><div class="sub" style="margin-bottom:8px">By segment. Hover a point for the number.</div>
+      ${series.length ? `<div class="chips anlegend">${series.map(s => `<span class="chip" style="height:28px;font-size:12px"><i class="segdot" style="background:${s.c}"></i> ${esc(s.name)} · ${s.vals.reduce((a,b)=>a+b,0)}</span>`).join('')}</div><div style="overflow-x:auto">${trendSvg(series, n, labels)}</div>` : '<div class="empty">No requests in this period yet.</div>'}</div>
+    <h2 class="sh">Property league <span>${league.length}</span></h2>
+    <div class="card" style="padding:0;overflow-x:auto"><table class="atable antable"><thead><tr><th>#</th><th>Property</th><th>Score</th><th>Requests</th><th>On time</th><th>Avg accept</th><th>Missed</th><th>Rating</th><th>Revenue</th><th>₹ / room-night</th><th>App use</th></tr></thead><tbody>
+      ${league.map((r, i) => { const c = r.c, p = r.pv; return `<tr><td class="num">${i+1}</td><td><b>${esc(r.p.name)}</b><br><small><i class="segdot" style="background:${AN_C[r.p.segment]}"></i> ${SEG_NAME(r.p.segment)}</small></td>
+        <td class="num"><b>${c.score ?? '–'}</b>${c.score != null && p.score != null ? `<br>${delta(c.score, p.score, 'up')}` : ''}</td><td class="num">${c.reqs}</td><td class="num">${c.onTime == null ? '–' : c.onTime + '%'}</td><td class="num">${c.acc == null ? '–' : c.acc.toFixed(1) + ' m'}</td>
+        <td class="num">${c.missed ? `<span class="pill late">${c.missed}</span>` : '0'}</td><td class="num">${c.rating == null ? '–' : c.rating.toFixed(1) + ' ★'}</td><td class="num">${c.revenue ? rupee(c.revenue) : '–'}</td><td class="num">${c.perNight == null ? '–' : rupee(c.perNight)}</td><td class="num">${c.adoption == null ? '–' : c.adoption + '%'}</td></tr>`; }).join('') || '<tr><td colspan="11" class="empty" style="padding:16px">No data in this period.</td></tr>'}
+    </tbody></table></div>
+    <div class="sub">Score out of 100: accepted on time (35%), guest rating (35%), missed requests (15%) and app use (15%). Properties without data are scored on what they have.</div>
+    <div class="angrid">
+      <div class="card"><h2 class="sh" style="margin:0 0 8px">Speed by department</h2><div style="overflow-x:auto"><table class="atable" style="min-width:420px"><thead><tr><th>Department</th><th>Requests</th><th>Avg accept</th><th>Avg complete</th><th>Missed</th></tr></thead><tbody>
+        ${depts.map(d => `<tr><td><b>${esc(d.dp)}</b></td><td class="num">${d.n}</td><td class="num">${d.a == null ? '–' : d.a.toFixed(1) + ' m'}</td><td class="num">${d.c == null ? '–' : d.c.toFixed(0) + ' m'}</td><td class="num">${d.missed}</td></tr>`).join('') || '<tr><td colspan="5" class="empty">No requests.</td></tr>'}</tbody></table></div></div>
+      <div class="card"><h2 class="sh" style="margin:0 0 8px">Most requested</h2>${top.length ? top.map(([k, v]) => `<div class="anbar"><span>${esc(k)}</span><i style="width:${Math.max(4, v.n*100/topMax)}%"></i><b>${v.n}</b></div>`).join('') : '<div class="empty">No requests.</div>'}</div>
+    </div>`;
+}
+async function exportAn(){
+  if (!window.XLSX) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+  const R = anRange(), props = myProps().filter(p => an.seg === 'all' || p.segment === an.seg), wb = XLSX.utils.book_new(), t = ms => ms ? new Date(ms).toLocaleString('en-IN') : '';
+  const league = props.map(p => ({p, c:anMetrics(an.data[p.id], R.from, R.to), pv:anMetrics(an.data[p.id], R.pFrom, R.pTo)})).filter(r => r.c);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(league.map(({p, c, pv}) => ({Property:p.name, Segment:SEG_NAME(p.segment), City:p.city, Code:p.code || '', Score:c.score, 'Score (prev)':pv.score, Requests:c.reqs, 'Requests (prev)':pv.reqs, 'On time %':c.onTime, 'Avg accept (min)':c.acc == null ? '' : +c.acc.toFixed(1), 'Avg complete (min)':c.comp == null ? '' : +c.comp.toFixed(0), Missed:c.missed, Rating:c.rating == null ? '' : +c.rating.toFixed(2), Reviews:c.fbN, 'Revenue via app (₹)':c.revenue, '₹ per room-night':c.perNight == null ? '' : Math.round(c.perNight), 'Room-nights':c.nights, Arrivals:c.arrivals, 'App use %':c.adoption, 'Offer bookings':c.offers}))), 'Properties');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(league.flatMap(({p, c}) => c.reqList.map(r => ({Property:p.name, Segment:SEG_NAME(p.segment), ID:r.id, Room:r.room, Guest:r.guestName, Type:kl(r), Department:r.dept, Items:(r.items||[]).map(i => `${i.name}${i.qty > 1 ? ' x' + i.qty : ''}`).join('; '), 'Value (₹)':r.total || 0, Offer:r.offer || '', Status:r.status, Received:t(r.receivedAt), Accepted:t(r.acceptedAt), 'Accepted by':r.acceptedBy || '', Completed:t(r.completedAt), 'Completed by':r.completedBy || '', 'Min to accept':r.acceptedAt ? +((r.acceptedAt - r.receivedAt)/60000).toFixed(1) : '', Rating:r.rating || ''})))), 'Requests');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(props.flatMap(p => ((an.data[p.id] || {}).fb || []).filter(f => f.at >= R.from && f.at < R.to).map(f => ({Property:p.name, Room:f.room, Guest:f.guestName, Overall:f.overall, Comment:f.comment || '', 'Wants a call':f.callback ? 'Yes' : '', When:t(f.at)})))), 'Feedback');
+  const out = XLSX.write(wb, {bookType:'xlsx', type:'array'});
+  const blob = new Blob([out], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const name = `Moustache-concierge-${R.label.replace(/[^A-Za-z0-9]+/g,'-')}${an.seg !== 'all' ? '-' + an.seg : ''}.xlsx`;
+  if (!downloads) downloads = await connectDownloads();
+  await downloads.save({filename:name, data:blob}); audit('analytics.export', `Exported ${name}`);
+}
+$app.addEventListener('click', async e => { if (!AD) return; const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.anrange) { an.range = d.anrange; an.at = 0; an.data = {}; loadAn(true); return renderAdmin(); }
+  if (d.anseg) { an.seg = d.anseg; return renderAdmin(); }
+  if (d.anrefresh) { loadAn(true); return; }
+  if (d.anx) { b.disabled = true; try { await exportAn(); toast('Excel file saved.'); } catch(err){ console.error(err); toast('Export failed. Try again.'); } b.disabled = false; return; }
+});
 
 /* ---------- BOOT ---------- */
 window.addEventListener('hashchange', () => location.reload());
