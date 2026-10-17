@@ -547,6 +547,53 @@ tr.off td{opacity:.55}
 .anbar b{text-align:right;font-variant-numeric:tabular-nums}
 @media (max-width:900px){.angrid{grid-template-columns:minmax(0,1fr)}}
 
+/* ===== Phase 7.5 ===== */
+.stags{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.stags .pill{height:24px;font-size:11.5px;gap:4px}
+.btn.danger{color:#9A2F0E;border-color:#E8C4B4}
+.btn.danger-solid{background:#9A2F0E;color:#fff}
+.spanel{border-top:1px dashed var(--line2);margin-top:10px;padding-top:10px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.spanel .chip{height:34px;font-size:13px}
+.spanel .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.gdecl{border-color:#E8C4B4;background:#FDF6F2}.gdelay{border-color:#F1D9A8;background:#FDF8EC}.gassign{background:var(--tint)}
+.gdecl p,.gdelay p{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.pill.declined{background:#FBE3D8;color:#9A2F0E}
+.hform{display:flex;flex-direction:column;gap:10px}
+.hsnap{display:flex;gap:6px;flex-wrap:wrap}.hsnap span{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
+.hsnap.small span{font-size:11px;padding:2px 8px}
+.hlist{display:flex;flex-direction:column;gap:10px}
+.hnote{display:flex;flex-direction:column;gap:8px}.hnote p{margin:0;font-size:14.5px;line-height:1.55}
+.hnote.pin{border:2px solid #C2410C}.hnote.new{box-shadow:inset 4px 0 0 var(--navy)}
+.hhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.hhead small{color:var(--muted)}
+.hfoot{display:flex;justify-content:space-between;align-items:center;gap:10px}.hfoot small{color:var(--muted)}
+.hbanner,.nsbanner{display:flex;gap:10px;align-items:center;text-align:left;width:100%;font-size:14px;color:var(--ink);cursor:pointer}
+.hbanner{border-color:var(--navy);background:var(--tint)}.nsbanner{border-color:#F1D9A8;background:#FDF8EC}
+.nsbox{display:flex;flex-direction:column;gap:10px;border-color:#F1D9A8;background:#FDF8EC}
+.nslist{display:flex;gap:6px;flex-wrap:wrap}.nslist .chip{height:34px;font-size:13px;background:#fff}
+.shiftbox{width:100%;max-width:440px}
+.shiftgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.shiftu{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border:1px solid var(--line);border-radius:14px;background:var(--white);color:var(--ink)}
+.shiftu:hover{border-color:var(--navy)}
+.shiftu i{width:40px;height:40px;border-radius:50%;background:var(--deep);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:16px}
+.shiftu small{font-size:11px;color:var(--muted)}
+.pinov .overlay{z-index:90}
+.pinbox{width:min(340px,100%);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.pindots{display:flex;gap:14px}.pindots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--navy)}.pindots i.on{background:var(--navy)}
+.pinpad{display:grid;grid-template-columns:repeat(3,72px);gap:10px}
+.pinpad button{height:60px;border-radius:16px;border:1px solid var(--line2);background:var(--white);font-size:22px;font-weight:600;color:var(--ink)}
+.pinpad button:active{background:var(--tint)}
+.lockbar{display:flex;gap:8px;align-items:center;font-size:13.5px;background:var(--tint)}
+fieldset.lockrow{border:0;margin:0;padding:0;min-width:0}fieldset.lockrow .card{opacity:.75}
+.lockpill{height:24px;font-size:11.5px;gap:4px;align-self:end}
+.histbox{display:flex;flex-direction:column;gap:8px;border-color:var(--navy)}
+.histrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.histrow small{display:block;color:var(--muted);font-size:12px}
+.ms-prev{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;margin-left:auto}
+.ms-prev+.ms-user,.ms-prev~.ms-user{margin-left:12px}
+.ms-ver{font-size:10px;opacity:.45;padding:4px 10px 0}
+.tl-ver{font-size:11px;color:var(--muted)}
+.prevbar{position:sticky;top:0;z-index:70;display:flex;gap:6px;align-items:center;justify-content:center;background:#C2410C;color:#fff;font-size:12.5px;font-weight:600;padding:7px 12px}
+
 </style>
 </head>
 <body>
@@ -754,7 +801,7 @@ function startSession(stay){
   unsubs.push(live(pdb.collection('requests').where('stayId','==',S.id), q => {
     const prev = new Map(requests.map(r=>[r.id,r.status]));
     requests = q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.receivedAt-b.receivedAt);
-    requests.forEach(r => { const p = prev.get(r.id); if (p && p!==r.status && (r.status==='accepted' || r.status==='completed')) gNotify(kl(r), r.status==='accepted' ? `accepted${r.acceptedBy ? ' by ' + r.acceptedBy.split(' ')[0] : ''}, on the way` : 'done'); });
+    requests.forEach(r => { const p = prev.get(r.id); if (p && p!==r.status && ((r.status==='accepted' && !r.assignedTo && !r.delayedAt) || r.status==='completed')) gNotify(kl(r), r.status==='accepted' ? `accepted${r.acceptedBy ? ' by ' + r.acceptedBy.split(' ')[0] : ''}, on the way` : 'done'); });
     soon(render);
   }, 'requests'));
   unsubs.push(live(pdb.collection('messages').where('stayId','==',S.id), q => {
@@ -1521,7 +1568,7 @@ function renderAdmin(){
   const y = window.scrollY; const ae = document.activeElement; const aid = ae && ae.id; const selS = ae && typeof ae.selectionStart==='number' ? ae.selectionStart : null;
   const inH = aStays.filter(s=>s.status==='in-house').length; const open = aReq.filter(r=>r.status==='received'||r.status==='accepted').length;
   { const want = (aSec==='hq' || aSec==='analytics') ? 'master' : curSeg(); if (SKIN_NOW !== want) skin(want, 'console'); }
-  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : ['live','chats','roomsboard'].includes(aSec) ? liveView() : aSec==='analytics' ? analyticsView() : listEditor(aSec);
+  let body = aSec==='hq' ? hqView() : aSec==='dashboard' ? dashView() : aSec==='stays' ? staysView() : aSec==='prop' ? propEditor() : aSec==='qr' ? qrView() : aSec==='settings' ? settingsView() : aSec==='props' ? propsView() : aSec==='team' ? teamView() : aSec==='account' ? accountView() : aSec==='wall' ? wallView() : ['live','chats','roomsboard'].includes(aSec) ? liveView() : aSec==='analytics' ? analyticsView() : aSec==='handover' ? handoverView() : aSec==='health' ? healthView() : listEditor(aSec);
   $app.className = 'app staff msapp';
   $app.innerHTML = `<div class="ms">${msSide()}<div class="ms-main">${msTop()}<main class="spage">${body}</main></div></div>${msPopHtml()}${copyDialog()}
     ${shareOverlay()}`;
@@ -2115,7 +2162,7 @@ function route(){
   const h = decodeURIComponent((location.hash || '').slice(1)).trim();
   if (h === 'admin' || h === 'staff') return {entry:h};
   let m = h.match(/^r([A-Za-z0-9-]{1,8})$/); if (m) return {pid:DEFAULT_PID, room:m[1]};
-  m = h.match(/^([a-z0-9][a-z0-9-]{1,60})(?:\.r([A-Za-z0-9-]{1,8}))?(?:\.k([A-Za-z0-9]{16,40}))?$/); if (m) return {pid:m[1], room:m[2] || null, key:m[3] || null};
+  m = h.match(/^([a-z0-9][a-z0-9-]{1,60})(?:\.r([A-Za-z0-9-]{1,8}))?(?:\.k([A-Za-z0-9]{16,40}))?(\.preview)?$/); if (m) return {pid:m[1], room:m[2] || null, key:m[3] || null, preview:!!m[4]};
   return {};
 }
 const baseUrl = () => (/^https?:\/\//.test(SETTINGS.guestUrl || '') ? SETTINGS.guestUrl : PLATFORM_URL).split('#')[0];
@@ -3628,6 +3675,320 @@ $app.addEventListener('click', async e => { if (!AD) return; const b = e.target.
   if (d.anx) { b.disabled = true; try { await exportAn(); toast('Excel file saved.'); } catch(err){ console.error(err); toast('Export failed. Try again.'); } b.disabled = false; return; }
 });
 
+
+/* =================================================================
+   PHASE 7.5 — hardening & adoption
+   A. shift operations : Delay · Assign · Can't do · shift handover · tap-your-name + PIN
+   B. reliability      : arrivals-not-sent counter · guest offline outbox · error monitoring
+   C. governance       : brand-locked content · see-as-guest preview · edit history & undo
+   ================================================================= */
+const APP_VERSION = '7.5.0';
+Object.assign(NI, { handover:'M5 4h14v16H5zM9 8h6M9 12h6M9 16h3', health:'M3 12h4l3-8 4 16 3-8h4', lock:'M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3', eye:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', history:'M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2', users:'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0M17 11a2.5 2.5 0 1 0 0-5M21 20a5 5 0 0 0-4-5' });
+
+/* ---------------------------------------------------------------
+   B3. ERROR MONITORING — every crash is logged centrally (brand admin → System health)
+   --------------------------------------------------------------- */
+let errSent = 0; const errSeen = new Set();
+function reportError(msg, stack){
+  try {
+    msg = String(msg || 'Unknown error').slice(0, 200); const key = msg + '|' + String(stack || '').slice(0, 80);
+    if (!db || errSent >= 8 || errSeen.has(key) || /ResizeObserver|Script error\.?$/.test(msg)) return; errSeen.add(key); errSent++;
+    db.collection('errors').add({at:Date.now(), msg, stack:String(stack || '').slice(0, 600), v:APP_VERSION, pid:PID || '', role:ME ? ME.role : (S ? 'guest' : 'visitor'), who:ME ? ME.code : (S ? 'room ' + S.room : ''), where:(AD ? 'console:' + aSec : S ? 'guest:' + (view ? view.kind : tab) : 'login'), ua:navigator.userAgent.slice(0, 120), mode:MODE}).catch(() => {});
+  } catch(e){}
+}
+window.addEventListener('error', e => reportError(e.message, e.error && e.error.stack));
+window.addEventListener('unhandledrejection', e => { const r = e.reason || {}; if (r && r.code === 'preview') return; reportError('Unhandled: ' + (r.message || r.code || r), r.stack); });
+
+/* ---------------------------------------------------------------
+   B2. GUEST OFFLINE OUTBOX — requests & messages survive bad Wi-Fi and resend automatically
+   --------------------------------------------------------------- */
+const OUTBOX = 'mc_outbox';
+const outbox = () => store.get(OUTBOX) || [];
+function queueWrite(path, doc){ const q = outbox().filter(x => x.path !== path); q.push({path, doc, pid:PID, at:Date.now()}); store.set(OUTBOX, q); }
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej({code:'timeout'}), ms))]);
+let flushing = false;
+async function flushOutbox(){
+  if (flushing || !db) return; const q = outbox(); if (!q.length) return; flushing = true; const left = [];
+  for (const it of q) { if (Date.now() - it.at > 12*3600000) continue;
+    try { const i = it.path.indexOf('/'); await withTimeout(db.doc(it.path.slice(0, i) + '__' + it.pid + it.path.slice(i)).set(it.doc), 10000); } catch(e){ left.push(it); } }
+  store.set(OUTBOX, left); flushing = false;
+  if (S && q.length > left.length) { toast(left.length ? `Sent ${q.length - left.length}; ${left.length} still waiting for signal.` : 'You’re back online. Everything has been sent.'); soon(render); }
+}
+window.addEventListener('online', flushOutbox); setInterval(flushOutbox, 15000);
+submitRequest = async function(kind, payload){
+  if (!db || !S) return;
+  if (PREVIEW) { toast('Preview: nothing was sent.'); return; }
+  const id = PREFIX[kind] + '-' + Date.now().toString(36).toUpperCase().slice(-5);
+  const doc = Object.assign({ stayId:S.id, room:S.room, bed:S.bed || null, guestName:S.guestName, kind, dept:DEPT[kind], status:'received', receivedAt:Date.now(), acceptedAt:null, completedAt:null, rating:null, note:'', items:[], total:0, when:'', targetMin:15 }, payload);
+  try { await withTimeout(pdb.doc('requests/' + id).set(doc), 9000); }
+  catch(e){ if (e && e.code === 'quota_exceeded') { toast('The request store is full. Please call reception.'); return; }
+    queueWrite('requests/' + id, doc); toast('Weak signal: your request is saved and will send automatically.'); }
+  if (payload.offer) pdb.doc('offerEvents/' + S.id + '_' + payload.offer).set({stayId:S.id, room:S.room, code:payload.offer, viewedAt:Date.now(), tappedAt:Date.now(), bookedAt:Date.now(), requestId:id, value:doc.total||0}).catch(() => {});
+  draft = {}; view = {kind:'req', id}; tab = 'services'; window.scrollTo(0,0); render();
+};
+sendMessage = async function(text){
+  text = (text || '').trim(); if (!text || !db || !S) return;
+  if (PREVIEW) { toast('Preview: nothing was sent.'); return; }
+  const id = 'm' + Date.now().toString(36) + rnd(3), doc = {stayId:S.id, room:S.room, guestName:S.guestName, from:'guest', text:text.slice(0,600), at:Date.now(), read:false};
+  try { await withTimeout(pdb.doc('messages/' + id).set(doc), 9000); } catch(e){ queueWrite('messages/' + id, doc); toast('Weak signal: message saved, it will send automatically.'); }
+};
+const _vRequest75 = vRequest;
+vRequest = () => { const r = requests.find(x => x.id === view.id); if (!r && outbox().some(x => x.path === 'requests/' + view.id)) return sheet('Waiting for signal', '', `<div class="card empty">Your request is saved on this phone and will reach the team as soon as you have signal. You don’t need to send it again.</div>`);
+  let h = _vRequest75(); if (!r) return h;
+  const banner = r.status === 'declined' ? `<div class="card gdecl"><b>We can’t do this one right now</b><p>${esc(r.declineReason || '')}${r.alternative ? `<br><b>What we can offer:</b> ${esc(r.alternative)}` : ''}</p></div>`
+    : r.delayedAt && r.status !== 'completed' ? `<div class="card gdelay"><b>Running a little late</b><p>New time: about ${tfmt(r.receivedAt + (r.targetMin || 15)*60000)}${r.delayReason ? ` · ${esc(r.delayReason)}` : ''}. Sorry for the wait.</p></div>`
+    : r.assignedTo && r.status === 'accepted' ? `<div class="card gassign"><b>${esc(r.assignedTo.name.split(' ')[0])} is on it</b></div>` : '';
+  return banner ? h.replace('<div class="card" style="display:flex;flex-direction:column;gap:14px">', banner + '<div class="card" style="display:flex;flex-direction:column;gap:14px">') : h; };
+/* guest: tell them about delays, declines and who is on it (once each) */
+const gSeen = new Map();
+setInterval(() => { if (!S || PREVIEW) return; requests.forEach(r => { const k = [r.delayedAt || 0, r.status === 'declined' ? 1 : 0, r.assignedTo ? r.assignedTo.code : ''].join('|'), was = gSeen.get(r.id); gSeen.set(r.id, k); if (was === undefined || was === k) return;
+  if (r.status === 'declined') gNotify(kl(r), 'we can’t do this one right now. ' + (r.alternative ? 'Tap to see what we can offer.' : ''));
+  else if (r.delayedAt && (!was || was.split('|')[0] !== String(r.delayedAt))) gNotify(kl(r), `running about ${r.delayMin} min late${r.delayReason ? ' (' + r.delayReason + ')' : ''}`);
+  else if (r.assignedTo) gNotify(kl(r), `${r.assignedTo.name.split(' ')[0]} is on it`); }); }, 1500);
+
+/* ---------------------------------------------------------------
+   A1–A3. DELAY · ASSIGN · CAN'T DO on every request card
+   --------------------------------------------------------------- */
+let team = [], teamUnsub = null, sAct = null;
+function watchTeam(){ if (teamUnsub) teamUnsub(); teamUnsub = live(db.collection('users'), q => { team = q.docs.map(d => d.data()).filter(u => u.active !== false && (u.role === 'fo' || u.role === 'dept') && (u.props || []).includes(PID)).map(u => ({code:u.code, name:u.name, role:u.role, dept:u.dept || 'Front Office'})); }, 'team'); }
+const DELAY_REASONS = ['Busy right now','Item being prepared','Out of stock, getting more','Technician on another call'];
+const DECLINE_REASONS = ['Not available today','Out of stock','Kitchen closed','Not possible at this hour'];
+const _sCard75 = sCard;
+sCard = r => {
+  let h = _sCard75(r);
+  const tags = `${r.assignedTo ? `<span class="pill accepted">${ni('users',12)} ${esc(r.assignedTo.name)}</span>` : ''}${r.delayedAt && r.status !== 'completed' ? `<span class="pill received">+${r.delayMin} min · ${esc(r.delayReason || 'delayed')}</span>` : ''}`;
+  if (tags) h = h.replace('<div class="sacts">', `<div class="stags">${tags}</div><div class="sacts">`);
+  if (!canAct() || !['received','accepted'].includes(r.status)) return h;
+  const more = `<button class="btn sm ghost" data-sx="delay" data-rid="${esc(r.id)}">Delay</button><button class="btn sm ghost" data-sx="assign" data-rid="${esc(r.id)}">Assign</button><button class="btn sm ghost danger" data-sx="decline" data-rid="${esc(r.id)}">Can’t do</button>`;
+  let panel = '';
+  if (sAct && sAct.id === r.id) {
+    if (sAct.mode === 'delay') panel = `<div class="spanel"><b>Delay by</b><div class="chips">${[10,15,30].map(m => `<button class="chip ${sAct.min===m?'on':''}" data-sxmin="${m}">+${m} min</button>`).join('')}</div><b>Reason (the guest sees this)</b><div class="chips">${DELAY_REASONS.map(x => `<button class="chip ${sAct.reason===x?'on':''}" data-sxreason="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="sacts"><button class="btn sm" data-sxgo="delay" ${sAct.min?'':'disabled'}>Tell the guest</button><button class="btn sm ghost" data-sxno="1">Cancel</button></div></div>`;
+    if (sAct.mode === 'assign') { const opts = team.filter(u => u.role === 'fo' || u.dept === r.dept); panel = `<div class="spanel"><b>Assign to</b><div class="chips">${opts.map(u => `<button class="chip ${sAct.to===u.code?'on':''}" data-sxto="${esc(u.code)}">${esc(u.name)} <small>· ${esc(u.role==='fo'?'Front office':u.dept)}</small></button>`).join('') || '<span class="sub">No team logins for this department yet. Add them in Team &amp; roles.</span>'}</div><div class="sacts"><button class="btn sm" data-sxgo="assign" ${sAct.to?'':'disabled'}>Assign${r.status==='received'?' & accept':''}</button><button class="btn sm ghost" data-sxno="1">Cancel</button></div></div>`; }
+    if (sAct.mode === 'decline') panel = `<div class="spanel"><b>Why can’t we do it? (the guest sees this)</b><div class="chips">${DECLINE_REASONS.map(x => `<button class="chip ${sAct.reason===x?'on':''}" data-sxreason="${esc(x)}">${esc(x)}</button>`).join('')}</div><label class="field af" for="sx-alt">What can we offer instead? (optional)<input id="sx-alt" maxlength="160" placeholder="e.g. Fresh lime soda instead, or after 7 AM" value="${esc(sAct.alt||'')}"></label><div class="sacts"><button class="btn sm danger-solid" data-sxgo="decline" ${sAct.reason?'':'disabled'}>Tell the guest</button><button class="btn sm ghost" data-sxno="1">Cancel</button></div></div>`;
+  }
+  return h.replace(/(<button class="btn sm ghost" data-schat=)/, more + '$1').replace(/<\/article>\s*$/, panel + '</article>');
+};
+$app.addEventListener('input', e => { if (sAct && e.target.id === 'sx-alt') sAct.alt = e.target.value; });
+$app.addEventListener('click', async e => {
+  if (!AD) return; const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.sx) { sAct = sAct && sAct.id === d.rid && sAct.mode === d.sx ? null : {id:d.rid, mode:d.sx}; return soon(renderAdmin); }
+  if (!sAct) return;
+  if (d.sxno) { sAct = null; return soon(renderAdmin); }
+  if (d.sxmin) { sAct.min = +d.sxmin; return soon(renderAdmin); }
+  if (d.sxreason) { sAct.reason = d.sxreason; return soon(renderAdmin); }
+  if (d.sxto) { sAct.to = d.sxto; return soon(renderAdmin); }
+  if (d.sxgo) { const r = sReq.find(x => x.id === sAct.id); if (!r) return; b.disabled = true; const now = Date.now(); let upd;
+    if (d.sxgo === 'delay') upd = {delayedAt:now, delayMin:sAct.min, delayReason:sAct.reason || '', delayedBy:ME.name, targetMin:Math.ceil((now - r.receivedAt)/60000) + sAct.min, ...(r.status === 'received' ? {status:'accepted', acceptedAt:now, acceptedBy:ME.name} : {})};
+    if (d.sxgo === 'assign') { const u = team.find(x => x.code === sAct.to); upd = {assignedTo:{code:u.code, name:u.name}, assignedBy:ME.name, assignedAt:now, ...(r.status === 'received' ? {status:'accepted', acceptedAt:now, acceptedBy:ME.name} : {})}; }
+    if (d.sxgo === 'decline') upd = {status:'declined', declinedAt:now, declinedBy:ME.name, declineReason:sAct.reason, alternative:(sAct.alt || '').trim()};
+    try { await pdb.doc('requests/' + r.id).update(upd); delete snoozed[r.id]; toast(d.sxgo === 'delay' ? 'Guest told about the delay.' : d.sxgo === 'assign' ? 'Assigned.' : 'Guest told.'); sAct = null; } catch(err){ toast('Not saved. Try again.'); b.disabled = false; }
+    return soon(renderAdmin); }
+});
+/* assignee hears it once; "Mine" filter for staff */
+const assignSeen = new Set(); let assignInit = false;
+setInterval(() => { if (!AD || !ME || !ST) return; const mine = sReq.filter(r => r.assignedTo && r.assignedTo.code === ME.code && r.status === 'accepted');
+  mine.forEach(r => { if (!assignSeen.has(r.id)) { assignSeen.add(r.id); if (assignInit && r.assignedBy !== ME.name) { chime(true); toast(`Assigned to you: Room ${r.room} · ${kl(r)}`); } } }); assignInit = true; }, 1500);
+
+/* ---------------------------------------------------------------
+   A4. SHIFT HANDOVER
+   --------------------------------------------------------------- */
+SECTIONS.unshift(['handover','Shift handover','Notes for the next shift; everyone acknowledges']);
+NAV_GROUPS.find(g => g[0] === 'Live')[1].push('handover');
+let hNotes = [], hUnsub = null;
+function watchHandover(){ if (hUnsub) hUnsub(); hUnsub = live(pdb.collection('handover').where('at','>=',since(3)), q => { hNotes = q.docs.map(d => ({id:d.id, ...d.data()})).sort((a, b) => b.at - a.at); if (AD && (aSec === 'handover' || aSec === 'live')) soon(renderAdmin); else soon(updateBadges); }, 'handover'); }
+const unackedNotes = () => !ME ? [] : hNotes.filter(n => n.by !== ME.code && !(n.ack || []).some(a => a.code === ME.code));
+const shiftName = (ms = Date.now()) => { const h = new Date(ms).getHours(); return h >= 7 && h < 15 ? 'Morning shift' : h >= 15 && h < 23 ? 'Evening shift' : 'Night shift'; };
+function handoverView(){
+  const open = sReq.filter(r => r.status === 'received' || r.status === 'accepted'), xco = open.filter(r => r.kind === 'checkout').length, inH = (aStays.length ? aStays : sStays).filter(s => s.status === 'in-house').length;
+  return `<div class="ahead"><div><h1 class="t">Shift handover</h1><div class="sub">${esc(P.name)} · last 3 days · ${unackedNotes().length} not yet acknowledged by you</div></div></div>
+    ${secAllowed('handover') && ME.role !== 'dept' || true ? `<form class="card hform" id="hoform"><div class="hsnap"><span>${shiftName()}</span><span>${inH} in-house</span><span>${open.length} open requests</span>${xco ? `<span>${xco} express check-outs</span>` : ''}</div>
+      <label class="field af" for="ho-text">What should the next shift know?<textarea id="ho-text" rows="3" maxlength="1200" placeholder="e.g. Room 204 wants a 6 AM airport cab. Steam room heater acting up, engineer coming at 10. Dorm 210 bed 3 is a late arrival."></textarea></label>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><label class="abool" for="ho-pin"><input type="checkbox" id="ho-pin"> Important: keep on top until everyone has seen it</label><button class="btn sm" type="submit" style="margin-left:auto">Post handover</button></div></form>` : ''}
+    <div class="hlist">${hNotes.length ? [...hNotes].sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0) || b.at - a.at).map(n => { const mine = n.by === ME.code, acked = (n.ack || []).some(a => a.code === ME.code);
+      return `<article class="card hnote ${n.pin?'pin':''} ${!mine && !acked?'new':''}"><div class="hhead"><b>${esc(n.name)}</b><small>${esc(n.shift || '')} · ${fmtDT(n.at)}</small>${n.pin ? '<span class="pill late">Important</span>' : ''}</div>
+        ${n.snap ? `<div class="hsnap small"><span>${n.snap.inH} in-house</span><span>${n.snap.open} open</span></div>` : ''}
+        <p>${esc(n.text).replace(/\n/g,'<br>')}</p>
+        <div class="hfoot"><small>${(n.ack || []).length ? 'Seen by ' + n.ack.map(a => esc(a.name.split(' ')[0])).join(', ') : 'Not seen yet'}</small>${!mine && !acked ? `<button class="btn sm" data-hack="${esc(n.id)}">Got it</button>` : ''}</div></article>`; }).join('') : '<div class="card empty">No handover notes in the last 3 days.</div>'}</div>`;
+}
+$app.addEventListener('submit', async e => { if (!AD || e.target.id !== 'hoform') return; e.preventDefault(); const t = document.getElementById('ho-text').value.trim(); if (!t) return toast('Write a note first.');
+  const open = sReq.filter(r => r.status === 'received' || r.status === 'accepted').length, inH = (aStays.length ? aStays : sStays).filter(s => s.status === 'in-house').length;
+  try { await pdb.doc('handover/h' + Date.now().toString(36)).set({at:Date.now(), by:ME.code, name:ME.name, role:ME.role, shift:shiftName(), text:t.slice(0,1200), pin:document.getElementById('ho-pin').checked, ack:[], snap:{open, inH}}); toast('Handover posted.'); e.target.reset(); } catch(err){ toast('Not posted. Try again.'); } });
+$app.addEventListener('click', async e => { if (!AD) return; const b = e.target.closest('[data-hack]'); if (!b) return; const n = hNotes.find(x => x.id === b.dataset.hack); if (!n) return;
+  try { await pdb.doc('handover/' + n.id).update({ack:(n.ack || []).concat({code:ME.code, name:ME.name, at:Date.now()})}); } catch(err){ toast('Not saved.'); } });
+
+/* ---------------------------------------------------------------
+   B1. ARRIVALS NOT SENT
+   --------------------------------------------------------------- */
+const notSent = () => (aStays || []).filter(s => s.status === 'in-house' && !s.linkSentAt && !s.firstLoginAt && !(s.checkOut && Date.now() > s.checkOut));
+const _staysView75 = staysView;
+staysView = () => { const ns = notSent(); const h = _staysView75(); if (!ns.length) return h;
+  const box = `<div class="card nsbox"><div><b>${ns.length} guest${ns.length===1?' hasn’t':'s haven’t'} received the concierge link yet</b><div class="sub">They can’t use the app until you send it. Tap Send, then press send in WhatsApp.</div></div><div class="nslist">${ns.slice(0, 12).map(s => `<button class="chip" data-asend="${esc(s.id)}">${ni('chats',14)} ${esc(s.room)}${s.bed?'·'+s.bed:''} · ${esc(s.guestName)}</button>`).join('')}</div></div>`;
+  return h.replace('</div></div>\n  ', '</div></div>\n  ' + box).replace(/(<div class="fdgrid">)/, ns.length && h.indexOf('nsbox') < 0 ? box + '$1' : '$1'); };
+
+/* ---------------------------------------------------------------
+   A5. TAP-YOUR-NAME + PIN on shared desk devices
+   --------------------------------------------------------------- */
+const shiftUsers = () => store.get('mc_shift_users') || [];
+const isShared = () => !!store.get('mc_shared');
+function rememberOnDevice(){ if (!isShared() || !ME) return; const l = shiftUsers().filter(u => u.code !== ME.code); l.unshift({code:ME.code, name:ME.name, role:ME.role}); store.set('mc_shift_users', l.slice(0, 12)); }
+const _renderTeamLogin75 = renderTeamLogin;
+renderTeamLogin = function(err, info){
+  _renderTeamLogin75(err, info);
+  const f = document.getElementById('tlf'); if (!f) return;
+  f.querySelector('#tl-btn').insertAdjacentHTML('beforebegin', `<label class="abool" for="tl-shared" style="font-weight:500;font-size:13px"><input type="checkbox" id="tl-shared" ${isShared()?'checked':''}> This is a shared desk device (team can switch with a 4-digit PIN)</label>`);
+  const list = isShared() ? shiftUsers() : [];
+  if (list.length && !err) f.insertAdjacentHTML('beforebegin', `<div class="card shiftbox"><div class="glabel" style="margin:0 0 8px">Who’s on shift?</div><div class="shiftgrid">${list.map(u => `<button type="button" class="shiftu" data-qpick="${esc(u.code)}"><i>${esc(u.name[0])}</i><b>${esc(u.name.split(' ')[0])}</b><small>${esc(ROLES[u.role] || '')}</small></button>`).join('')}</div><div class="sub" style="margin-top:8px">Tap your name and enter your PIN. New here? Sign in below.</div></div>`);
+  document.getElementById('tl-shared').addEventListener('change', ev => { store.set('mc_shared', ev.target.checked ? 1 : 0); if (!ev.target.checked) store.del('mc_shift_users'); });
+};
+let qPick = null, qPin = '';
+function pinPad(){
+  const u = shiftUsers().find(x => x.code === qPick); if (!u) return '';
+  return `<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="pinttl"><div class="card pinbox"><div class="glabel" style="margin:0">Quick switch</div><h2 id="pinttl" class="t" style="font-size:22px">${esc(u.name)}</h2>
+    <div class="pindots">${[0,1,2,3].map(i => `<i class="${qPin.length>i?'on':''}"></i>`).join('')}</div><div class="err" id="pinerr" role="alert"></div>
+    <div class="pinpad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k => k === '' ? '<span></span>' : `<button type="button" data-qkey="${k}" aria-label="${k==='⌫'?'Delete':k}">${k}</button>`).join('')}</div>
+    <button type="button" class="linkbtn" data-qclose="1" style="color:var(--muted)">Cancel</button></div></div>`;
+}
+function showPin(){ document.querySelectorAll('.pinov').forEach(x => x.remove()); const w = document.createElement('div'); w.className = 'pinov'; w.innerHTML = pinPad(); document.body.appendChild(w); }
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-qpick],[data-qkey],[data-qclose]'); if (!b) return; const d = b.dataset;
+  if (d.qpick) { qPick = d.qpick; qPin = ''; return showPin(); }
+  if (d.qclose) { qPick = null; qPin = ''; document.querySelectorAll('.pinov').forEach(x => x.remove()); return; }
+  if (d.qkey) { if (d.qkey === '⌫') qPin = qPin.slice(0, -1); else if (qPin.length < 4) qPin += d.qkey; showPin(); if (qPin.length === 4) await tryPin(); }
+});
+document.addEventListener('keydown', e => { if (!qPick) return; if (/^\d$/.test(e.key) && qPin.length < 4) { qPin += e.key; showPin(); if (qPin.length === 4) tryPin(); } else if (e.key === 'Backspace') { qPin = qPin.slice(0, -1); showPin(); } else if (e.key === 'Escape') { qPick = null; document.querySelectorAll('.pinov').forEach(x => x.remove()); } });
+async function tryPin(){
+  const code = qPick, pin = qPin, lk = store.get('mc_qlock') || {};
+  const fail = m => { qPin = ''; showPin(); const el = document.getElementById('pinerr'); if (el) el.textContent = m; };
+  if (lk[code] && lk[code].until > Date.now()) return fail('Too many tries. Use your password below, or wait a minute.');
+  try { const s = await withAuthRetry(() => db.doc('users/' + code).get()); const u = s.exists ? s.data() : null;
+    if (!u || u.active === false) return fail('This login is switched off.');
+    if (!u.pin) return fail('No PIN set yet. Sign in with your password, then set a PIN in My account.');
+    if (await pbkdf2(pin, u.pin.salt, u.pin.iter) !== u.pin.hash) { const n = ((lk[code] && lk[code].n) || 0) + 1; lk[code] = n >= 5 ? {n:0, until:Date.now() + 60000} : {n}; store.set('mc_qlock', lk); return fail('Wrong PIN. Try again.'); }
+    delete lk[code]; store.set('mc_qlock', lk);
+    ME = meFrom(u); store.set('mc_me', {code, ver:ME.ver}); store.set('mc_code', code); db.doc('users/' + code).update({lastLoginAt:Date.now(), lastQuickAt:Date.now()}).catch(() => {});
+    qPick = null; qPin = ''; document.querySelectorAll('.pinov').forEach(x => x.remove()); soundOn = store.get('mc_sound') !== 0; try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch(_){}
+    rememberOnDevice(); enterConsole();
+  } catch(e){ fail('Couldn’t reach the server. Check the internet.'); }
+}
+const _enterConsole75 = enterConsole;
+enterConsole = async function(){ rememberOnDevice(); await _enterConsole75(); watchTeam(); watchHandover(); };
+/* "Switch user" keeps the device list and goes back to the name tiles */
+const _msSide75 = msSide;
+msSide = () => _msSide75().replace('<button class="linkbtn" data-alogout="1">Log out</button>', `${isShared() ? '<button class="linkbtn" data-aswitch="1">Switch user</button>' : ''}<button class="linkbtn" data-alogout="1">Log out</button>`).replace('</aside>', `<div class="ms-ver">v${APP_VERSION}</div></aside>`);
+$app.addEventListener('click', e => { const b = e.target.closest('[data-aswitch]'); if (!b) return; e.stopImmediatePropagation(); logoutTeam('Switched. Tap your name to continue.'); }, true);
+/* PIN in My account */
+const _accountView75 = accountView;
+accountView = () => _accountView75() + `<form class="card" id="pinf" novalidate style="display:flex;flex-direction:column;gap:12px;max-width:520px"><h2 class="sh" style="margin:0">Quick-switch PIN</h2>
+  <div class="sub">On a shared desk device, tap your name and enter this 4-digit PIN instead of your password.${isShared() ? '' : ' Tick “shared desk device” on the login screen to use it on this device.'}</div>
+  <label class="field" for="pin-1">New 4-digit PIN<input id="pin-1" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></label><label class="field" for="pin-2">Type it again<input id="pin-2" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></label>
+  <button class="btn" type="submit" style="align-self:flex-start">Save PIN</button></form>`;
+$app.addEventListener('submit', async e => { if (!AD || e.target.id !== 'pinf') return; e.preventDefault(); const a = document.getElementById('pin-1').value, b2 = document.getElementById('pin-2').value;
+  if (!/^\d{4}$/.test(a)) return toast('The PIN needs exactly 4 digits.'); if (a !== b2) return toast('The two PINs don’t match.'); if (/^(\d)\1{3}$|^1234$|^0000$/.test(a)) return toast('Pick a less obvious PIN.');
+  try { const salt = rnd(16); await db.doc('users/' + ME.code).update({pin:{salt, iter:60000, hash:await pbkdf2(a, salt, 60000)}, pinSetAt:Date.now()}); e.target.reset(); toast('PIN saved.'); } catch(err){ toast('Not saved. Try again.'); } });
+
+/* ---------------------------------------------------------------
+   C1. BRAND-LOCKED CONTENT  ·  C3. EDIT HISTORY & UNDO
+   --------------------------------------------------------------- */
+let LOCKS = {sections:{}}, lockUnsub = null;
+function watchLocks(){ if (lockUnsub) return; lockUnsub = live(db.doc('platform/locks'), s => { LOCKS = s.exists ? Object.assign({sections:{}}, s.data()) : {sections:{}}; if (AD) soon(renderAdmin); }, 'locks'); }
+const secLocked = sec => !!(LOCKS.sections || {})[sec] && ME && ME.role !== 'brand';
+const LOCKABLE = ['services','offers','hk','dining','spa','laundry','taxi','occ','guide','contacts','policies','events'];
+let histOpen = null, histRows = [];
+const _listEditor75 = listEditor;
+listEditor = sec => {
+  let h = _listEditor75(sec);
+  const lockBtn = ME && ME.role === 'brand' && LOCKABLE.includes(sec) ? `<button class="btn sm ghost" data-alock="${sec}">${ni('lock',14)} ${(LOCKS.sections||{})[sec] ? 'Unlock for GMs' : 'Lock for GMs'}</button>` : '';
+  const histBtn = `<button class="btn sm ghost" data-ahist="${sec}">${ni('history',14)} History</button>`;
+  h = h.replace('<div class="abar">', `<div class="abar">${histBtn}${lockBtn}`);
+  if ((LOCKS.sections||{})[sec]) h = h.replace('<div class="alist">', `<div class="card lockbar">${ni('lock',16)} <span>${ME.role === 'brand' ? 'Locked: GMs can see this list but not change it. Brand standard across all properties.' : 'Locked by the brand. This list is a brand standard; ask the brand admin for changes.'}</span></div><div class="alist">`);
+  /* row-level brand lock: rows with locked:true can't be edited by GMs */
+  const rows = draftOf(sec), parts = h.split('<div class="card arow');
+  if (parts.length - 1 === rows.length) h = parts.map((p, i) => { if (i === 0) return p; const lockIt = secLocked(sec) || (rows[i-1].locked && ME.role !== 'brand'); if (!lockIt) return '<div class="card arow' + p; const end = p.indexOf('</div>\n    </div>'); return end < 0 ? '<div class="card arow' + p : '<fieldset class="lockrow" disabled><div class="card arow' + p.slice(0, end + 17) + '</fieldset>' + p.slice(end + 17); }).join('');
+  if (secLocked(sec)) h = h.replace(/<button class="btn sm ghost" data-aadd="[^"]+">\+ Add<\/button>/g, '').replace(/<button class="btn sm ghost" data-arestore="[^"]+">Restore original<\/button>/, '').replace(/<button class="btn sm" data-asave="[^"]+"[^>]*>[^<]*<\/button>/g, '');
+  if (histOpen === sec) h = h.replace('<div class="alist">', historyPanel(sec) + '<div class="alist">');
+  return h;
+};
+if (!SCHEMA.policies.some(f => f[0] === 'locked')) Object.keys(SCHEMA).filter(k => LOCKABLE.includes(k)).forEach(k => SCHEMA[k].push(['locked','Brand standard (GMs can’t change)','bool']));
+const _fieldInput75 = fieldInput;
+fieldInput = (sec, i, f) => f[0] === 'locked' && ME && ME.role !== 'brand' ? (draftOf(sec)[i].locked ? `<span class="pill cancelled lockpill">${ni('lock',12)} Brand standard</span>` : '') : _fieldInput75(sec, i, f);
+function historyPanel(sec){
+  return `<div class="card histbox"><div style="display:flex;justify-content:space-between;align-items:center"><b>Saved versions of this list</b><button class="btn sm ghost" data-ahistclose="1">Close</button></div>
+    ${histRows.length ? histRows.map((v, i) => `<div class="histrow"><div><b>${fmtDT(v.at)}</b><small>Replaced by ${esc(v.by || '')} · ${Array.isArray(v.body.items) ? v.body.items.length + ' items' : 'property details'}</small></div>${secLocked(sec) ? '' : `<button class="btn sm ${i===0?'':'ghost'}" data-ahistuse="${esc(v.id)}">${i===0?'Undo last save':'Restore this version'}</button>`}</div>`).join('') : '<div class="sub">No earlier versions yet. Each time you save, the previous version is kept here.</div>'}</div>`;
+}
+async function loadHistory(sec){ try { const q = await pdb.collection('history').where('sec','==',sec).get(); histRows = q.docs.map(d => ({id:d.id, ...d.data()})).sort((a, b) => b.at - a.at).slice(0, 15); } catch(e){ histRows = []; } soon(renderAdmin); }
+/* before every save: keep the published version; block saves on locked lists */
+$app.addEventListener('click', async e => {
+  if (!AD) return; const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  const guarded = d.asave || d.aadd || d.adel || d.amove || d.arestore;
+  if (guarded && secLocked(guarded)) { e.stopImmediatePropagation(); return toast('Locked by the brand. Ask the brand admin for changes.'); }
+  if (d.asave && aDirty.has(d.asave)) { const sec = d.asave, body = sec === 'prop' ? clone(DATA.prop) : {items:clone(DATA[listKey(sec)] || [])};
+    pdb.doc('history/' + sec + '-' + Date.now().toString(36)).set({sec, at:Date.now(), by:ME.name, body}).catch(() => {}); if (histOpen === sec) setTimeout(() => loadHistory(sec), 800); }
+  if (d.alock) { e.stopImmediatePropagation(); const on = !(LOCKS.sections||{})[d.alock]; try { await db.doc('platform/locks').set({sections:Object.assign({}, LOCKS.sections, {[d.alock]:on}), updatedBy:ME.code, updatedAt:Date.now()}); audit('content.lock', `${(SECTIONS.find(s => s[0] === d.alock)||[,d.alock])[1]} ${on ? 'locked' : 'unlocked'} for GMs`); toast(on ? 'Locked for GMs across all properties.' : 'Unlocked.'); } catch(err){ toast('Not saved.'); } return; }
+  if (d.ahist) { histOpen = histOpen === d.ahist ? null : d.ahist; histRows = []; if (histOpen) loadHistory(histOpen); return soon(renderAdmin); }
+  if (d.ahistclose) { histOpen = null; return soon(renderAdmin); }
+  if (d.ahistuse) { const v = histRows.find(x => x.id === d.ahistuse); if (!v) return; aDraft[v.sec] = v.sec === 'prop' ? clone(v.body) : clone(v.body.items || []); aDirty.add(v.sec); toast('Earlier version loaded. Check it, then tap Save & publish.'); return soon(renderAdmin); }
+}, true);
+const _propEditor75 = propEditor;
+propEditor = () => _propEditor75().replace('<div class="abar">', `<div class="abar"><button class="btn sm ghost" data-ahist="prop">${ni('history',14)} History</button>`).replace('<div class="card"><div class="agrid">', (histOpen === 'prop' ? historyPanel('prop') : '') + '<div class="card"><div class="agrid">');
+
+/* ---------------------------------------------------------------
+   C2. SEE AS GUEST — read-only preview with a sample stay
+   --------------------------------------------------------------- */
+let PREVIEW = false;
+const _msTop75 = msTop;
+msTop = () => _msTop75().replace('<div class="ms-user">', `${aSec !== 'hq' && aSec !== 'analytics' ? `<a class="ms-prev" href="${esc(baseUrl())}#${esc(PID)}.preview" target="_blank" rel="noopener">${ni('eye',16)}<span class="ms-hide">See as guest</span></a>` : ''}<div class="ms-user">`);
+function startPreview(){
+  PREVIEW = true; const r0 = (DATA.roomList || [])[0] || {no:'101'};
+  S = {id:'preview', room:String(r0.no), guestName: curSeg() === 'hostel' ? 'Alex Traveller' : 'Ms. Guest Preview', checkIn:Date.now() - 3600000, checkOut:Date.now() + 22*3600000, status:'in-house', offers:L('offers').map(o => o.code), offersEnabled:true, foodOrdering:true, info:DATA.rooms[String(r0.no)] || {cat:'',tier:'Standard',tub:false}};
+  requests = []; messages = []; tab = 'home'; view = null;
+  const wr = () => Promise.reject({code:'preview', message:'Preview: nothing is saved'});
+  const fake = ref => Object.assign({}, ref, {set:wr, update:wr, add:wr, delete:wr});
+  const realDoc = pdb.doc, realCol = pdb.collection;
+  pdb.doc = p => fake(realDoc(p)); pdb.collection = c => { const r = realCol(c); return Object.assign({}, r, {add:wr, doc:id => fake(r.doc(id))}); };
+  render();
+}
+const _render75 = render;
+render = function(){ _render75(); if (PREVIEW && !document.querySelector('.prevbar')) document.body.insertAdjacentHTML('afterbegin', `<div class="prevbar">${ni('eye',14)} Guest preview of ${esc(P.name)} · nothing you tap is sent</div>`); };
+
+/* ---------------------------------------------------------------
+   B3b. SYSTEM HEALTH (brand admin)
+   --------------------------------------------------------------- */
+SECTIONS.push(['health','System health','Errors from guest phones and staff screens, app version']);
+NAV_GROUPS.find(g => g[0] === 'Account')[1].push('health');
+const _secAllowed75 = secAllowed;
+secAllowed = sec => sec === 'handover' ? !!ME : sec === 'health' ? !!ME && ME.role === 'brand' : _secAllowed75(sec);
+let health = {at:0, rows:[]};
+async function loadHealth(){ try { const q = await db.collection('errors').where('at','>=',since(7)).get(); health = {at:Date.now(), rows:q.docs.map(d => d.data())}; } catch(e){ health = {at:Date.now(), rows:[], err:String(e.code || e.message)}; } soon(renderAdmin); }
+function healthView(){
+  if (!health.at) loadHealth();
+  const g = {}; health.rows.forEach(r => { const k = r.msg; (g[k] = g[k] || {msg:k, n:0, last:0, where:new Set(), props:new Set(), v:new Set()}); g[k].n++; g[k].last = Math.max(g[k].last, r.at); g[k].where.add(r.where); g[k].props.add(r.pid); g[k].v.add(r.v); });
+  const list = Object.values(g).sort((a, b) => b.last - a.last), q = outbox();
+  return `<div class="ahead"><div><h1 class="t">System health</h1><div class="sub">App version ${APP_VERSION} · ${MODE === 'firebase' ? 'Firebase connected' : MODE} · errors from the last 7 days</div></div><div class="abar"><button class="btn sm ghost" data-hrefresh="1">${ni('refresh',14)} Refresh</button></div></div>
+    <div class="hqkpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="card hqk ${list.length?'warn':''}"><div class="eyebrow">Different errors</div><b>${list.length}</b><span>${health.rows.length} reports in 7 days</span></div><div class="card hqk"><div class="eyebrow">Properties affected</div><b>${new Set(health.rows.map(r => r.pid)).size}</b><span>of ${PROPS.length}</span></div><div class="card hqk"><div class="eyebrow">Waiting to send on this device</div><b>${q.length}</b><span>offline outbox</span></div></div>
+    <div class="card" style="padding:0;overflow-x:auto"><table class="atable"><thead><tr><th>Error</th><th>Times</th><th>Last seen</th><th>Where</th><th>Properties</th><th>Version</th></tr></thead><tbody>
+      ${list.map(r => `<tr><td style="max-width:420px"><code style="white-space:normal">${esc(r.msg)}</code></td><td class="num">${r.n}</td><td style="white-space:nowrap">${fmtDT(r.last)}</td><td><small>${[...r.where].slice(0,3).map(esc).join(', ')}</small></td><td><small>${[...r.props].map(id => esc((PROPS.find(p => p.id === id) || {name:id||'–'}).name)).join(', ')}</small></td><td><small>${[...r.v].map(esc).join(', ')}</small></td></tr>`).join('') || '<tr><td colspan="6" class="empty" style="padding:16px">No errors reported in the last 7 days.</td></tr>'}
+    </tbody></table></div>
+    <div class="sub">Errors are sent automatically from any guest phone or staff screen (max 8 per visit). Share this screen with your developer when something looks wrong.</div>`;
+}
+$app.addEventListener('click', e => { if (!AD) return; const b = e.target.closest('[data-hrefresh]'); if (b) loadHealth(); });
+
+/* ---------------------------------------------------------------
+   wiring: dispatch, badges, banners, version on login
+   --------------------------------------------------------------- */
+const _renderAdmin75 = renderAdmin;
+renderAdmin = function(){ watchLocks(); return _renderAdmin75(); };
+const _updateBadges75 = updateBadges;
+updateBadges = function(){ _updateBadges75(); const set = (k, n) => { const b = document.querySelector(`.ms .aside [data-asec="${k}"]`); if (!b) return; let c = b.querySelector('.count'); if (!n) { if (c) c.remove(); return; } if (!c) { c = document.createElement('span'); c.className = 'count'; b.appendChild(c); } c.textContent = n; };
+  set('handover', unackedNotes().length); set('stays', secAllowed('stays') ? notSent().length : 0); };
+const _liveView75 = liveView;
+liveView = () => { const un = unackedNotes(), ns = secAllowed('stays') ? notSent() : [];
+  return `${un.length ? `<button class="card hbanner" data-asec-go="handover">${ni('handover',18)}<span><b>${un.length} handover note${un.length>1?'s':''} for you</b> · ${esc(un[0].name)}: “${esc(un[0].text.slice(0, 90))}${un[0].text.length > 90 ? '…' : ''}”</span></button>` : ''}${ns.length ? `<button class="card nsbanner" data-asec-go="stays">${ni('chats',18)}<span><b>${ns.length} arrival${ns.length>1?'s':''} without the concierge link</b> · open Front desk to send</span></button>` : ''}${ME && isShared() && !ME.hasPin ? '' : ''}` + _liveView75(); };
+const _renderTeamLogin75b = renderTeamLogin;
+renderTeamLogin = function(err, info){ _renderTeamLogin75b(err, info); const t = document.querySelector('.tlogin'); if (t && !t.querySelector('.tl-ver')) t.insertAdjacentHTML('beforeend', `<div class="tl-ver">Moustache Concierge v${APP_VERSION}</div>`); };
+
+const _switchProp75 = switchProp;
+switchProp = async function(pid){ await _switchProp75(pid); if (ME) { watchTeam(); watchHandover(); } histOpen = null; };
+
 /* ---------- BOOT ---------- */
 window.addEventListener('hashchange', () => location.reload());
 $app.innerHTML = '<div class="login"><div style="margin:auto;color:var(--soft);font-size:14px">Loading concierge…</div></div>';
@@ -3650,6 +4011,7 @@ $app.innerHTML = '<div class="login"><div style="margin:auto;color:var(--soft);f
   if (!prop) { PROP = null; skin('master'); return renderGuestNotice('This link isn’t active', 'Please scan the QR card in your room again, or ask the front desk for your link.'); }
   await usePid(pid, 'guest'); watchProps();
   if (prop.status === 'Closed' || prop.guestApp === false) return renderGuestNotice(P.greet || 'Welcome', `The digital concierge isn’t available at ${P.name} right now. Please call the front desk${P.ext ? ' on Ext. ' + P.ext : ''}.`);
+  if (R.preview) return startPreview();
   if (R.key) return keyLogin(pid, R.key);
   renderLogin();
   if (db && sess && sess.id && (sess.pid || DEFAULT_PID) === pid) {
